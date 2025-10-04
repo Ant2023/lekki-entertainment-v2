@@ -85,10 +85,11 @@ export default function HomePage() {
       <Section title="Next Event">
         <div className="mx-auto max-w-3xl">
           <CountdownCard
-            title="Afrobeats Night: DJAMES Live"
-            startsAt="2025-10-04T22:00:00-06:00"
-            href="/events/djames-colorado-springs"
-          />
+  title="Nigerian Independence Celebration — Colorado Springs"
+  startsAt="2025-10-04T21:00:00-06:00" // 9:00 PM Mountain Time
+  href="/events/nigerian-independence-colorado-springs"
+/>
+
         </div>
       </Section>
 
