@@ -46,7 +46,8 @@ export default function HomePage() {
               <Button
                 as={Link}
                 href="/events"
-                className="bg-lekki-primary text-white hover:bg-lekki-accent"
+                className="bg-lekki-primary hover:bg-lekki-accent shadow-[0_0_0_0_rgba(0,0,0,0)] hover:shadow-[0_8px_32px_0_rgba(124,58,237,.35)] transition"
+
               >
                 See Events
               </Button>
@@ -78,7 +79,8 @@ export default function HomePage() {
       {/* FEATURED EVENT */}
       <Section title="Featured Event" subtitle="Don’t miss the next big night.">
         <div className="grid">
-          <EventCard e={featured} />
+          <EventCard e={{ ...featured, coverImage: "/images/hero-dj.jpg" }} />
+
         </div>
       </Section>
 
@@ -99,7 +101,8 @@ export default function HomePage() {
               p: "Buy securely on our ticket partner, straight from each event.",
             },
           ].map((x, i) => (
-            <Card key={i} className="p-6 bg-lekki-panel/50 ring-1 ring-white/5">
+            <Card key={i} className="p-6 card-glass">
+
               <h3 className="font-semibold text-white">{x.h}</h3>
               <p className="mt-2 text-sm text-lekki-subtext">{x.p}</p>
             </Card>

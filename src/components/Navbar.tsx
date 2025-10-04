@@ -22,9 +22,9 @@ export default function Navbar() {
           <div className="relative inline-grid place-items-center">
             <div className="absolute -inset-3 rounded-full bg-lekki-primary/20 blur-xl transition group-hover:bg-lekki-accent/30" />
             <Image
-              src="/images/logo.jpg"
+              src="/images/logo-lekki.png"
               alt="LEKKI Entertainment"
-              width={36}
+              width={56}
               height={36}
               className="relative rounded-full ring-1 ring-white/10"
             />
