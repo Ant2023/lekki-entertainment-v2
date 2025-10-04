@@ -43,23 +43,24 @@ export default function HomePage() {
               events.
             </p>
 
-            <div className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-              <Button
-                as={Link}
-                href="/events"
-                className="bg-lekki-primary hover:bg-lekki-accent shadow-[0_0_0_0_rgba(0,0,0,0)] hover:shadow-[0_8px_32px_0_rgba(124,58,237,.35)] transition"
-              >
-                See Events
-              </Button>
-              <Button
-                as={Link}
-                href="#subscribe"
-                className="bg-white/10 text-white hover:bg-white/15"
-              >
-                Get Updates
-              </Button>
-            </div>
-          </div>
+<div className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+  <Button
+    as={Link}
+    href="/events"
+    className="u-hover-lift bg-lekki-primary hover:bg-lekki-accent text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-[0_0_0_0_rgba(0,0,0,0)] hover:shadow-[0_8px_32px_0_rgba(124,58,237,.35)]"
+  >
+    See Events
+  </Button>
+
+  <Button
+    as={Link}
+    href="#subscribe"
+    className="u-hover-lift bg-white/10 text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/15 transition-all duration-200"
+  >
+    Get Updates
+  </Button>
+</div>
+
 
           {/* Right: hero image */}
           <div className="relative mt-8 sm:mt-0 overflow-hidden rounded-3xl border border-zinc-800 shadow-soft">
@@ -138,7 +139,8 @@ export default function HomePage() {
 
       {/* SUBSCRIBE */}
       <Section id="subscribe" title="Get updates" subtitle="Join the list for early drops & discounts.">
-        <Card className="p-6 bg-lekki-panel/50 ring-1 ring-white/5">
+        <Card className="p-6 card-glass u-hover-lift">...</Card>
+
           <form
             action="https://formspree.io/f/your-id"
             method="POST"
