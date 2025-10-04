@@ -2,13 +2,95 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, :root { height: 100%; }
-body { @apply bg-zinc-950 text-zinc-100 antialiased; }
+/* ---------- Base Theme ---------- */
+:root { color-scheme: dark; }
+
+html, body, :root { height: 100%; margin: 0; }
 
 html { scroll-behavior: smooth; }
 
-.fade-in { animation: fade-in 0.6s ease-out both; }
-@keyframes fade-in { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
+body {
+  @apply antialiased text-[#EDEDF1];
+  /* Futuristic deep purple gradient */
+  background: radial-gradient(
+      1600px 800px at 20% -10%,
+      #3b1d5f 0%,     /* luminous violet center */
+      #1b0e2d 40%,    /* rich plum midtone */
+      #0d0717 100%    /* near-black fade */
+  ),
+  linear-gradient(145deg, #1c0e2d 0%, #10091a 100%);
+  background-blend-mode: overlay;
+}
 
-/* Neon glow helper for logo */
-.neon { filter: drop-shadow(0 0 8px rgba(168,85,247,.6)) drop-shadow(0 0 16px rgba(14,165,233,.4)); }
+/* Safe area for iOS headers */
+.safe-top { padding-top: env(safe-area-inset-top); }
+
+/* ---------- Typography & Links ---------- */
+a {
+  color: #b68cff; /* sleek purple accent */
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: #d1b3ff;
+}
+
+/* ---------- Glow / Effects ---------- */
+.neon {
+  filter:
+    drop-shadow(0 0 8px rgba(182, 140, 255, 0.45))
+    drop-shadow(0 0 18px rgba(124, 58, 237, 0.35))
+    drop-shadow(0 0 32px rgba(157, 78, 221, 0.25));
+}
+
+/* Fade animation for section entrances */
+.fade-in {
+  animation: fade-in 0.6s ease-out both;
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Form Elements ---------- */
+input, textarea {
+  @apply text-white placeholder:text-zinc-500;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(6px);
+}
+
+/* Subtle floating card effect for sections */
+.card-glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+/* Subtle vignette to add depth and hide any gradient banding */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(800px 500px at 18% 10%, rgba(100, 56, 160, 0.18), transparent 60%),
+    radial-gradient(1200px 700px at 80% -20%, rgba(157, 78, 221, 0.12), transparent 60%),
+    radial-gradient(1000px 600px at 50% 120%, rgba(10, 6, 16, 0.6), transparent 60%);
+  mix-blend-mode: screen;
+  z-index: 0;
+}
+
+/* Micro-noise to kill color banding on large displays */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .06;
+  background-image: url("data:image/svg+xml;utf8,\
+  <svg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'>\
+  <filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter>\
+  <rect width='100%' height='100%' filter='url(%23n)' opacity='0.35'/></svg>");
+  background-size: 300px 300px;
+  z-index: 0;
+}

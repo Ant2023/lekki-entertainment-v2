@@ -1,37 +1,121 @@
-'use client';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import Image from 'next/image';
+"use client";
+import Link from "next/link";
+import { useState } from "react";
+import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const links = [
-  { href: '/', label: 'Home' },
-  { href: '/events', label: 'Events' },
-  { href: '/gallery', label: 'Gallery' },
+  { href: "/", label: "Home" },
+  { href: "/events", label: "Events" },
+  { href: "/gallery", label: "Gallery" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur supports-[backdrop-filter]:bg-zinc-950/70 border-b border-zinc-800">
+    <header className="sticky top-0 z-50 w-full border-b border-zinc-800 bg-lekki-panel/70 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+        {/* Logo + Title */}
         <Link href="/" className="flex items-center gap-2 group">
-          <Image src="/images/logo.jpg" alt="LEKKI Entertainment" width={36} height={36} className="rounded-full ring-1 ring-white/10 group-hover:ring-sky-400/40 transition" />
-          <span className="text-sm sm:text-base font-extrabold tracking-tight text-white">LEKKI <span className="text-sky-400">Entertainment</span></span>
+          <div className="relative inline-grid place-items-center">
+            <div className="absolute -inset-3 rounded-full bg-lekki-primary/20 blur-xl transition group-hover:bg-lekki-accent/30" />
+            <Image
+              src="/images/logo.jpg"
+              alt="LEKKI Entertainment"
+              width={36}
+              height={36}
+              className="relative rounded-full ring-1 ring-white/10"
+            />
+          </div>
+          <span className="text-sm sm:text-base font-extrabold tracking-tight text-lekki-text">
+            LEKKI <span className="text-lekki-primary group-hover:text-lekki-accent transition">Entertainment</span>
+          </span>
         </Link>
-        <nav className="flex items-center gap-6 text-sm">
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-6 text-sm">
           {links.map((l) => (
-            <Link key={l.href} href={l.href} className={`hover:text-sky-400 transition ${pathname === l.href ? 'text-sky-400 font-semibold' : 'text-zinc-300'}`}>
+            <Link
+              key={l.href}
+              href={l.href}
+              className={`transition ${
+                pathname === l.href
+                  ? "text-lekki-primary font-semibold"
+                  : "text-lekki-subtext hover:text-lekki-accent"
+              }`}
+            >
               {l.label}
             </Link>
           ))}
           <Link
             href="#subscribe"
-            className="rounded-full bg-sky-600 px-4 py-2 text-white text-sm font-semibold shadow hover:opacity-90"
+            className="rounded-full bg-lekki-primary px-4 py-2 text-white text-sm font-semibold shadow hover:bg-lekki-accent transition"
           >
             Get Updates
           </Link>
         </nav>
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="md:hidden inline-flex items-center justify-center rounded-md p-2 hover:bg-white/10"
+          aria-label="Toggle menu"
+        >
+          <svg
+            className="h-6 w-6 text-lekki-text"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            {open ? (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            ) : (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            )}
+          </svg>
+        </button>
       </div>
+
+      {/* Mobile Dropdown Menu */}
+      {open && (
+        <div className="md:hidden border-t border-zinc-800 bg-lekki-panel/90 backdrop-blur-md">
+          <div className="flex flex-col gap-2 px-4 py-3 text-sm">
+            {links.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className={`rounded-md px-3 py-2 transition ${
+                  pathname === l.href
+                    ? "text-lekki-primary font-semibold bg-white/5"
+                    : "text-lekki-subtext hover:bg-white/5 hover:text-lekki-accent"
+                }`}
+              >
+                {l.label}
+              </Link>
+            ))}
+            <Link
+              href="#subscribe"
+              onClick={() => setOpen(false)}
+              className="rounded-md bg-lekki-primary px-3 py-2 text-center font-medium text-white hover:bg-lekki-accent transition"
+            >
+              Get Updates
+            </Link>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
