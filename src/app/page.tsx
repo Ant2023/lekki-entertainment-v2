@@ -1,4 +1,5 @@
-import CountdownCard from "@/components/CountdownCard";
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import Section from "@/components/Section";
@@ -6,8 +7,11 @@ import { events } from "@/data/events";
 import EventCard from "@/components/EventCard";
 import { Button, Card, Pill } from "@/components/UI";
 
+// If you created the component as: src/components/countdownCard.tsx (lowercase “c”)
+import CountdownCard from "@/components/countdownCard";
+
 export default function HomePage() {
-  const featured = events[0];
+  const featured = events?.[0];
 
   return (
     <div className="bg-transparent">
@@ -33,38 +37,38 @@ export default function HomePage() {
               Premium Afro Nightlife
             </Pill>
 
-            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-lekki-text">
+            <h1 className="text-3xl font-extrabold tracking-tight text-lekki-text sm:text-5xl">
               LEKKI Entertainment
             </h1>
 
             <p className="mt-3 text-lekki-subtext">
-              Curating unforgettable Afro beats, culture, and nightlife
-              experiences. Stay in the loop for upcoming shows and exclusive
-              events.
+              Curating unforgettable Afro beats, culture, and nightlife experiences. Stay in the loop
+              for upcoming shows and exclusive events.
             </p>
 
-<div className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-  <Button
-    as={Link}
-    href="/events"
-    className="u-hover-lift bg-lekki-primary hover:bg-lekki-accent text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-[0_0_0_0_rgba(0,0,0,0)] hover:shadow-[0_8px_32px_0_rgba(124,58,237,.35)]"
-  >
-    See Events
-  </Button>
+            {/* CTAs */}
+            <div className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+              <Button
+                as={Link}
+                href="/events"
+                className="u-hover-lift rounded-xl bg-lekki-primary px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-lekki-accent hover:shadow-[0_8px_32px_0_rgba(124,58,237,.35)]"
+              >
+                See Events
+              </Button>
 
-  <Button
-    as={Link}
-    href="#subscribe"
-    className="u-hover-lift bg-white/10 text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/15 transition-all duration-200"
-  >
-    Get Updates
-  </Button>
-</div>
-
+              <Button
+                as={Link}
+                href="#subscribe"
+                className="u-hover-lift rounded-xl bg-white/10 px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-white/15"
+              >
+                Get Updates
+              </Button>
+            </div>
+          </div>
 
           {/* Right: hero image */}
-          <div className="relative mt-8 sm:mt-0 overflow-hidden rounded-3xl border border-zinc-800 shadow-soft">
-            <div className="relative w-full aspect-[16/9] sm:aspect-auto sm:h-full">
+          <div className="relative mt-8 overflow-hidden rounded-3xl border border-zinc-800 shadow-soft sm:mt-0">
+            <div className="relative aspect-[16/9] w-full sm:aspect-auto sm:h-full">
               <Image
                 src="/images/hero.jpg"
                 alt="Afro nightlife crowd"
@@ -79,7 +83,7 @@ export default function HomePage() {
 
       {/* COUNTDOWN */}
       <Section title="Next Event">
-        <div className="max-w-3xl mx-auto">
+        <div className="mx-auto max-w-3xl">
           <CountdownCard
             title="Afrobeats Night: DJAMES Live"
             startsAt="2025-10-04T22:00:00-06:00"
@@ -91,7 +95,7 @@ export default function HomePage() {
       {/* FEATURED EVENT */}
       <Section title="Featured Event" subtitle="Don’t miss the next big night.">
         <div className="grid">
-          <EventCard e={{ ...featured, coverImage: "/images/hero-dj.jpg" }} />
+          {featured && <EventCard e={{ ...featured, coverImage: "/images/hero-dj.jpg" }} />}
         </div>
       </Section>
 
@@ -112,7 +116,7 @@ export default function HomePage() {
               p: "Buy securely on our ticket partner, straight from each event.",
             },
           ].map((x, i) => (
-            <Card key={i} className="p-6 card-glass">
+            <Card key={i} className="card-glass p-6">
               <h3 className="font-semibold text-white">{x.h}</h3>
               <p className="mt-2 text-sm text-lekki-subtext">{x.p}</p>
             </Card>
@@ -129,7 +133,7 @@ export default function HomePage() {
             .map((p, i) => (
               <div
                 key={i}
-                className="relative h-28 sm:h-32 overflow-hidden rounded-lg border border-zinc-800"
+                className="relative h-28 overflow-hidden rounded-lg border border-zinc-800 sm:h-32"
               >
                 <Image src={p.src} alt={p.alt || "Event"} fill className="object-cover" />
               </div>
@@ -139,8 +143,7 @@ export default function HomePage() {
 
       {/* SUBSCRIBE */}
       <Section id="subscribe" title="Get updates" subtitle="Join the list for early drops & discounts.">
-        <Card className="p-6 card-glass u-hover-lift">...</Card>
-
+        <Card className="bg-lekki-panel/50 p-6 ring-1 ring-white/5">
           <form
             action="https://formspree.io/f/your-id"
             method="POST"
