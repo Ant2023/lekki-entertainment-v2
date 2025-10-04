@@ -1,3 +1,4 @@
+import CountdownCard from "@/components/CountdownCard";
 import Image from "next/image";
 import Link from "next/link";
 import Section from "@/components/Section";
@@ -47,7 +48,6 @@ export default function HomePage() {
                 as={Link}
                 href="/events"
                 className="bg-lekki-primary hover:bg-lekki-accent shadow-[0_0_0_0_rgba(0,0,0,0)] hover:shadow-[0_8px_32px_0_rgba(124,58,237,.35)] transition"
-
               >
                 See Events
               </Button>
@@ -76,11 +76,21 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* COUNTDOWN */}
+      <Section title="Next Event">
+        <div className="max-w-3xl mx-auto">
+          <CountdownCard
+            title="Afrobeats Night: DJAMES Live"
+            startsAt="2025-10-04T22:00:00-06:00"
+            href="/events/djames-colorado-springs"
+          />
+        </div>
+      </Section>
+
       {/* FEATURED EVENT */}
       <Section title="Featured Event" subtitle="Don’t miss the next big night.">
         <div className="grid">
           <EventCard e={{ ...featured, coverImage: "/images/hero-dj.jpg" }} />
-
         </div>
       </Section>
 
@@ -102,7 +112,6 @@ export default function HomePage() {
             },
           ].map((x, i) => (
             <Card key={i} className="p-6 card-glass">
-
               <h3 className="font-semibold text-white">{x.h}</h3>
               <p className="mt-2 text-sm text-lekki-subtext">{x.p}</p>
             </Card>
@@ -128,11 +137,7 @@ export default function HomePage() {
       </Section>
 
       {/* SUBSCRIBE */}
-      <Section
-        id="subscribe"
-        title="Get updates"
-        subtitle="Join the list for early drops & discounts."
-      >
+      <Section id="subscribe" title="Get updates" subtitle="Join the list for early drops & discounts.">
         <Card className="p-6 bg-lekki-panel/50 ring-1 ring-white/5">
           <form
             action="https://formspree.io/f/your-id"
