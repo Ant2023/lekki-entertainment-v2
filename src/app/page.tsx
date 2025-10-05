@@ -6,97 +6,59 @@ import Section from "@/components/Section";
 import { events } from "@/data/events";
 import EventCard from "@/components/EventCard";
 import { Button, Card, Pill } from "@/components/UI";
-
-// If you created the component as: src/components/countdownCard.tsx (lowercase “c”)
 import CountdownCard from "@/components/countdownCard";
+import Hero from "@/components/EnhancedHero";
 
 export default function HomePage() {
   const featured = events?.[0];
 
   return (
     <div className="bg-transparent">
-      {/* HERO */}
-      <div className="border-b border-white/5 bg-transparent">
-        <div className="mx-auto grid max-w-6xl px-4 py-12 sm:grid-cols-2 sm:gap-8 sm:py-18">
-          {/* Left: copy */}
-          <div className="fade-in text-center sm:text-left">
-            <div className="mb-4 flex justify-center sm:justify-start">
-              <div className="relative inline-grid place-items-center">
-                <div className="absolute -inset-6 rounded-full bg-lekki-primary/10 blur-2xl" />
-                <Image
-                  src="/images/logo.jpg"
-                  alt="LEKKI"
-                  width={80}
-                  height={80}
-                  className="relative rounded-full ring-1 ring-white/10"
-                />
-              </div>
-            </div>
-
-            <Pill className="mb-3 bg-white/5 text-lekki-subtext ring-1 ring-white/10">
-              Premium Afro Nightlife
-            </Pill>
-
-            <h1 className="text-3xl font-extrabold tracking-tight text-lekki-text sm:text-5xl">
-              LEKKI Entertainment
-            </h1>
-
-            <p className="mt-3 text-lekki-subtext">
-              Curating unforgettable Afro beats, culture, and nightlife experiences. Stay in the loop
-              for upcoming shows and exclusive events.
-            </p>
-
-            {/* CTAs */}
-            <div className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-              <Button
-                as={Link}
-                href="/events"
-                className="u-hover-lift rounded-xl bg-lekki-primary px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-lekki-accent hover:shadow-[0_8px_32px_0_rgba(124,58,237,.35)]"
-              >
-                See Events
-              </Button>
-
-              <Button
-                as={Link}
-                href="#subscribe"
-                className="u-hover-lift rounded-xl bg-white/10 px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-white/15"
-              >
-                Get Updates
-              </Button>
-            </div>
-          </div>
-
-          {/* Right: hero image */}
-          <div className="relative mt-8 overflow-hidden rounded-3xl border border-zinc-800 shadow-soft sm:mt-0">
-            <div className="relative aspect-[16/9] w-full sm:aspect-auto sm:h-full">
-              <Image
-                src="/images/hero.jpg"
-                alt="Afro nightlife crowd"
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* HERO (enhanced) */}
+      <Hero
+        title="LEKKI Entertainment"
+        subtitle="Premium Afrobeats, culture, and nightlife | Denver ·Aurora . Colorado Springs"
+        backgroundImages={[
+          "/images/hero-crowd.jpg",
+          "/images/hero.jpg",
+          "/images/hero-dj.jpg",
+          
+        ]}
+        overlayOpacity={0.55}
+        event={{
+          name: "Nigerian Independence Celebration · Colorado Springs",
+          dateISO: "2025-10-05T21:00:00-06:00", // 9:00 PM MT
+          location: "Colorado Springs, CO",
+          ticketUrl: "/events/nigerian-independence-colorado-springs",
+        }}
+        ctas={{
+          primary: { label: "Get Tickets", href: "/events" },
+          secondary: { label: "See All Events", href: "/events" },
+        }}
+        socials={{
+          instagram: "https://instagram.com/internationalnightlifeandent",
+          tiktok: "https://tiktok.com/@yourhandle",
+          youtube: "https://youtube.com/@yourchannel",
+        }}
+      />
 
       {/* COUNTDOWN */}
       <Section title="Next Event">
         <div className="mx-auto max-w-3xl">
           <CountdownCard
-  title="Nigerian Independence Celebration — Colorado Springs"
-  startsAt="2025-10-04T21:00:00-06:00" // 9:00 PM Mountain Time
-  href="/events/nigerian-independence-colorado-springs"
-/>
-
+            title="Nigerian Independence Celebration — Colorado Springs"
+            startsAt="2025-10-04T21:00:00-06:00" // keep as-is if you like; update to 2025-10-05T21:00:00-06:00 for consistency
+            href="/events/nigerian-independence-colorado-springs"
+          />
         </div>
       </Section>
 
       {/* FEATURED EVENT */}
       <Section title="Featured Event" subtitle="Don’t miss the next big night.">
         <div className="grid">
-          {featured && <EventCard e={{ ...featured, coverImage: "/images/hero-dj.jpg" }} />}
+          {featured && (
+            <EventCard e={{ ...featured, coverImage: "/images/hero-dj.jpg" }} />
+          )}
         </div>
       </Section>
 
