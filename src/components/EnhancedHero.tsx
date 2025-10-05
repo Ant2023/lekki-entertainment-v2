@@ -1,111 +1,80 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CalendarDays, MapPin, Ticket, Play, Instagram, Music2, Youtube } from "lucide-react";
-
-/**
- * Enhanced, drop-in Hero section for Lekki Entertainment
- * - Dark loungy vibe with soft grain & gradient overlay
- * - Background image slideshow (no external carousel lib)
- * - Slide-down entrance animation for headline block
- * - Event pill with date/location + live countdown
- * - Primary CTA: Get Tickets; Secondary: View Events
- * - Social links row (Instagram, TikTok, YouTube)
- * - Bottom scroll cue
- *
- * Usage example (in a page or layout):
- * <Hero
- *   title={"International Nightlife & Entertainment"}
- *   subtitle={"Premium Afro experiences · Dallas · Denver · Colorado Springs"}
- *   backgroundImages={["/images/hero-dj.jpg", "/images/hero-crowd.jpg", "/images/hero-dance.jpg"]}
- *   event={{
- *     name: "Nigerian Independence Celebration · Colorado Springs",
- *     dateISO: "2025-10-05T20:00:00-06:00",
- *     location: "Colorado Springs, CO",
- *     ticketUrl: "https://event.getbookt.io/colorado-springs-nigerian-independence-party"
- *   }}
- *   ctas={{
- *     primary: { label: "Get Tickets", href: "/events" },
- *     secondary: { label: "See All Events", href: "/events" }
- *   }}
- *   socials={{
- *     instagram: "https://instagram.com/internationalnightlifeandent",
- *     tiktok: "https://tiktok.com/@yourhandle",
- *     youtube: "https://youtube.com/@yourchannel"
- *   }}
- * />
- */
+import { Ticket } from "lucide-react";
 
 export type HeroProps = {
-  title: string;
-  subtitle?: string;
-  backgroundImages: string[]; // absolute or public/ paths
-  overlayOpacity?: number; // 0–1
-  slideIntervalMs?: number; // default 5000
+  /** Brand */
+  logoSrc: string;                 // e.g. "/images/logo-transparent.png"
+  title: string;                   // e.g. "LEKKI Entertainment"
+  subtitle?: string;               // short tagline
+
+  /** Visuals */
+  backgroundImages: string[];      // slideshow images
+  overlayOpacity?: number;         // 0–1 (default 0.6)
+  slideIntervalMs?: number;        // default 6000
+
+  /** Events (compact cues) */
   event?: {
-    name: string;
-    dateISO?: string; // ISO string; if provided, countdown shows
-    location?: string;
-    ticketUrl?: string;
+    name: string;                  // "Nigerian Independence · Colorado Springs"
+    dateISO?: string;              // ISO string for countdown
+    location?: string;             // "Colorado Springs, CO"
+    ticketUrl?: string;            // CTA href fallback
   };
+
+  /** CTA */
   ctas?: {
     primary?: { label: string; href: string };
-    secondary?: { label: string; href: string };
-  };
-  socials?: {
-    instagram?: string;
-    tiktok?: string;
-    youtube?: string;
   };
 };
 
 export default function Hero({
+  logoSrc,
   title,
   subtitle,
   backgroundImages,
-  overlayOpacity = 0.55,
-  slideIntervalMs = 5000,
+  overlayOpacity = 0.6,
+  slideIntervalMs = 6000,
   event,
   ctas,
-  socials,
 }: HeroProps) {
   const [index, setIndex] = useState(0);
   const [now, setNow] = useState<Date | null>(null);
 
+  // slideshow
   useEffect(() => {
-    // rotate background
     if (backgroundImages.length <= 1) return;
     const id = setInterval(() => setIndex((i) => (i + 1) % backgroundImages.length), slideIntervalMs);
     return () => clearInterval(id);
   }, [backgroundImages.length, slideIntervalMs]);
 
+  // countdown
   useEffect(() => {
     if (!event?.dateISO) return;
     setNow(new Date());
-    const tick = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(tick);
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
   }, [event?.dateISO]);
 
   const countdown = useMemo(() => {
     if (!event?.dateISO || !now) return null;
     const target = new Date(event.dateISO).getTime();
     const diff = target - now.getTime();
-    if (diff <= 0) return { live: true, text: "Happening now" } as const;
+    if (diff <= 0) return "Happening now";
     const s = Math.floor(diff / 1000);
-    const days = Math.floor(s / 86400);
-    const hours = Math.floor((s % 86400) / 3600);
-    const minutes = Math.floor((s % 3600) / 60);
-    const seconds = s % 60;
-    const pad = (n: number) => n.toString().padStart(2, "0");
-    return { live: false, text: `${days}d ${pad(hours)}:${pad(minutes)}:${pad(seconds)}` } as const;
+    const d = Math.floor(s / 86400);
+    const h = Math.floor((s % 86400) / 3600).toString().padStart(2, "0");
+    const m = Math.floor((s % 3600) / 60).toString().padStart(2, "0");
+    const sec = (s % 60).toString().padStart(2, "0");
+    return `${d}d ${h}:${m}:${sec}`;
   }, [event?.dateISO, now]);
 
   return (
     <section className="relative isolate">
-      {/* Background slideshow */}
+      {/* Background */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
@@ -118,13 +87,13 @@ export default function Hero({
           >
             <Image
               src={backgroundImages[index]}
-              alt="Event background"
+              alt="Background"
               fill
               priority
               sizes="100vw"
               className="object-cover"
             />
-            {/* soft film grain via radial gradient & overlay */}
+            {/* vignette + brand tint */}
             <div
               className="absolute inset-0"
               style={{
@@ -133,95 +102,72 @@ export default function Hero({
               }}
             />
             <div className="absolute inset-0" style={{ backgroundColor: `rgba(0,0,0,${overlayOpacity})` }} />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#3b1b6b]/30 to-transparent" />
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* Content area */}
-      <div className="mx-auto max-w-7xl px-4 py-24 sm:py-28 lg:py-36">
-        {/* Socials top-right */}
-        <div className="absolute right-4 top-4 flex items-center gap-3 text-white/80">
-          {socials?.instagram && (
-            <Link href={socials.instagram} aria-label="Instagram" className="hover:text-white transition">
-              <Instagram className="h-5 w-5" />
-            </Link>
-          )}
-          {socials?.tiktok && (
-            <Link href={socials.tiktok} aria-label="TikTok" className="hover:text-white transition">
-              <Music2 className="h-5 w-5" />
-            </Link>
-          )}
-          {socials?.youtube && (
-            <Link href={socials.youtube} aria-label="YouTube" className="hover:text-white transition">
-              <Youtube className="h-5 w-5" />
-            </Link>
-          )}
-        </div>
-
-        {/* Headline block with slide-down entrance */}
+      {/* Content */}
+      <div className="mx-auto max-w-7xl px-4 py-20 sm:py-28 lg:py-36">
         <motion.div
-          initial={{ y: -24, opacity: 0 }}
+          initial={{ y: -18, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="max-w-3xl"
         >
-          {event && (
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 ring-1 ring-white/15 backdrop-blur">
-              <CalendarDays className="h-4 w-4 text-white/85" />
-              <span className="text-sm text-white/90">{event.name}</span>
+          {/* Brand row */}
+          <div className="mb-4 flex items-center gap-3">
+            <div className="relative h-10 w-10 shrink-0">
+              <Image
+                src={logoSrc}
+                alt="Brand"
+                fill
+                className="rounded-full ring-1 ring-white/20 object-cover"
+                sizes="40px"
+                priority
+              />
             </div>
-          )}
+            <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/85 ring-1 ring-white/15">
+              Afro Nightlife • Events
+            </span>
+          </div>
 
-          <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl">
+          {/* Title / tagline */}
+          <h1 className="text-[28px] font-semibold tracking-tight text-white sm:text-5xl md:text-6xl">
             {title}
           </h1>
           {subtitle && (
-            <p className="mt-4 max-w-2xl text-lg text-white/80">{subtitle}</p>
+            <p className="mt-3 max-w-2xl text-base text-white/85 sm:text-lg">
+              {subtitle}
+            </p>
           )}
 
-          {/* Event meta + countdown */}
-          {(event?.location || countdown) && (
-            <div className="mt-5 flex flex-wrap items-center gap-3 text-sm text-white/85">
-              {event?.location && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 ring-1 ring-white/15">
-                  <MapPin className="h-4 w-4" /> {event.location}
-                </span>
-              )}
-              {countdown && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-400/20 px-2.5 py-1 ring-1 ring-emerald-300/30 text-emerald-50">
-                  <Play className="h-4 w-4" /> {countdown.text}
-                </span>
-              )}
-            </div>
+          {/* Compact “Upcoming” line — minimal on mobile */}
+          {event && (
+            <p className="mt-3 text-sm text-white/75">
+              <span className="font-medium">Upcoming:</span> {event.name}
+              {event.location ? ` • ${event.location}` : ""}
+              {countdown ? ` • ${countdown}` : ""}
+            </p>
           )}
 
-          {/* CTAs */}
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            {ctas?.primary && (
+          {/* One strong CTA */}
+          {ctas?.primary && (
+            <div className="mt-6">
               <Link
                 href={event?.ticketUrl || ctas.primary.href}
                 className="inline-flex items-center gap-2 rounded-2xl bg-white/95 px-5 py-3 font-medium text-gray-900 shadow-lg shadow-black/20 transition hover:bg-white"
               >
-                <Ticket className="h-5 w-5" /> {ctas.primary.label}
+                <Ticket className="h-5 w-5" />
+                {ctas.primary.label}
               </Link>
-            )}
-            {ctas?.secondary && (
-              <Link
-                href={ctas.secondary.href}
-                className="inline-flex items-center gap-2 rounded-2xl bg-white/10 px-5 py-3 font-medium text-white ring-1 ring-white/20 backdrop-blur transition hover:bg-white/15"
-              >
-                {ctas.secondary.label}
-              </Link>
-            )}
-          </div>
+            </div>
+          )}
         </motion.div>
       </div>
 
-      {/* Bottom gradient divider & scroll cue */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/70 to-transparent" />
-      <div className="absolute inset-x-0 bottom-4 flex justify-center">
-        <div className="animate-bounce text-white/70">Scroll</div>
-      </div>
+      {/* Bottom fade */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/70 to-transparent" />
     </section>
   );
 }

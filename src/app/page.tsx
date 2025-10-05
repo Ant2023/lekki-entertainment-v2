@@ -14,15 +14,14 @@ export default function HomePage() {
 
   return (
     <div className="bg-transparent">
-      {/* HERO (enhanced) */}
+      {/* HERO — minimal, brand-forward */}
       <Hero
         title="LEKKI Entertainment"
-        subtitle="Premium Afrobeats, culture, and nightlife | Denver ·Aurora . Colorado Springs"
+        subtitle="Premium Afrobeats, culture, and nightlife · Denver · Aurora · Colorado Springs"
         backgroundImages={[
           "/images/hero-crowd.jpg",
           "/images/hero.jpg",
           "/images/hero-dj.jpg",
-          
         ]}
         overlayOpacity={0.55}
         event={{
@@ -33,13 +32,9 @@ export default function HomePage() {
         }}
         ctas={{
           primary: { label: "Get Tickets", href: "/events" },
-          secondary: { label: "See All Events", href: "/events" },
+          // secondary removed to reduce clutter
         }}
-        socials={{
-          instagram: "https://instagram.com/internationalnightlifeandent",
-          tiktok: "https://tiktok.com/@yourhandle",
-          youtube: "https://youtube.com/@yourchannel",
-        }}
+        // socials removed to reduce clutter
       />
 
       {/* COUNTDOWN */}
@@ -47,7 +42,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-3xl">
           <CountdownCard
             title="Nigerian Independence Celebration — Colorado Springs"
-            startsAt="2025-10-04T21:00:00-06:00" // keep as-is if you like; update to 2025-10-05T21:00:00-06:00 for consistency
+            startsAt="2025-10-05T21:00:00-06:00"
             href="/events/nigerian-independence-colorado-springs"
           />
         </div>
