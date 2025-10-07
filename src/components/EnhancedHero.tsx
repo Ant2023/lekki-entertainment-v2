@@ -7,32 +7,23 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Ticket } from "lucide-react";
 
 export type HeroProps = {
-  /** Brand */
-  logoSrc: string;                 // e.g. "/images/logo-transparent.png"
-  title: string;                   // e.g. "LEKKI Entertainment"
-  subtitle?: string;               // short tagline
-
-  /** Visuals */
-  backgroundImages: string[];      // slideshow images
-  overlayOpacity?: number;         // 0–1 (default 0.6)
-  slideIntervalMs?: number;        // default 6000
-
-  /** Events (compact cues) */
+  title: string;
+  subtitle?: string;
+  backgroundImages: string[];
+  overlayOpacity?: number;          // 0–1 (default 0.6)
+  slideIntervalMs?: number;         // default 6000
   event?: {
-    name: string;                  // "Nigerian Independence · Colorado Springs"
-    dateISO?: string;              // ISO string for countdown
-    location?: string;             // "Colorado Springs, CO"
-    ticketUrl?: string;            // CTA href fallback
+    name: string;
+    dateISO?: string;
+    location?: string;
+    ticketUrl?: string;
   };
-
-  /** CTA */
   ctas?: {
     primary?: { label: string; href: string };
   };
 };
 
 export default function Hero({
-  logoSrc,
   title,
   subtitle,
   backgroundImages,
@@ -93,7 +84,7 @@ export default function Hero({
               sizes="100vw"
               className="object-cover"
             />
-            {/* vignette + brand tint */}
+            {/* vignette + overlay */}
             <div
               className="absolute inset-0"
               style={{
@@ -102,12 +93,11 @@ export default function Hero({
               }}
             />
             <div className="absolute inset-0" style={{ backgroundColor: `rgba(0,0,0,${overlayOpacity})` }} />
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#3b1b6b]/30 to-transparent" />
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* Content */}
+      {/* Content (clean mobile view) */}
       <div className="mx-auto max-w-7xl px-4 py-20 sm:py-28 lg:py-36">
         <motion.div
           initial={{ y: -18, opacity: 0 }}
@@ -115,23 +105,6 @@ export default function Hero({
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="max-w-3xl"
         >
-          {/* Brand row */}
-          <div className="mb-4 flex items-center gap-3">
-            <div className="relative h-10 w-10 shrink-0">
-              <Image
-                src={logoSrc}
-                alt="Brand"
-                fill
-                className="rounded-full ring-1 ring-white/20 object-cover"
-                sizes="40px"
-                priority
-              />
-            </div>
-            <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/85 ring-1 ring-white/15">
-              Afro Nightlife • Events
-            </span>
-          </div>
-
           {/* Title / tagline */}
           <h1 className="text-[28px] font-semibold tracking-tight text-white sm:text-5xl md:text-6xl">
             {title}
@@ -142,7 +115,7 @@ export default function Hero({
             </p>
           )}
 
-          {/* Compact “Upcoming” line — minimal on mobile */}
+          {/* Simple Upcoming line */}
           {event && (
             <p className="mt-3 text-sm text-white/75">
               <span className="font-medium">Upcoming:</span> {event.name}
@@ -151,7 +124,7 @@ export default function Hero({
             </p>
           )}
 
-          {/* One strong CTA */}
+          {/* Single CTA */}
           {ctas?.primary && (
             <div className="mt-6">
               <Link
