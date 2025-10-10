@@ -9,6 +9,7 @@ import { Button, Card, Pill } from "@/components/UI";
 import CountdownCard from "@/components/countdownCard";
 import Hero from "@/components/EnhancedHero";
 
+
 export default function HomePage() {
   const featured = events?.[0];
 
@@ -80,22 +81,35 @@ export default function HomePage() {
         </div>
       </Section>
 
-      {/* EVENT HIGHLIGHTS STRIP */}
-      <Section title="Event Highlights" subtitle="A quick taste from recent nights.">
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 md:grid-cols-6">
-          {events
-            .flatMap((e) => e.photos || [])
-            .slice(0, 12)
-            .map((p, i) => (
-              <div
-                key={i}
-                className="relative h-28 overflow-hidden rounded-lg border border-zinc-800 sm:h-32"
-              >
-                <Image src={p.src} alt={p.alt || "Event"} fill className="object-cover" />
-              </div>
-            ))}
+     {/* EVENT HIGHLIGHTS — upgraded photo wall */}
+<Section title="Event Highlights" subtitle="Energy. Vibes. Afrobeats.">
+  <div className="columns-2 sm:columns-3 md:columns-4 gap-2 space-y-2">
+    {events
+      .flatMap((e) => e.photos || [])
+      .slice(0, 16)
+      .map((p, i) => (
+        <div
+          key={i}
+          className="relative overflow-hidden rounded-xl group cursor-pointer break-inside-avoid"
+        >
+          <Image
+            src={p.src}
+            alt={p.alt || "Event"}
+            width={800}
+            height={600}
+            className="object-cover w-full h-auto transform transition-transform duration-500 group-hover:scale-110 group-hover:brightness-110"
+          />
+          {/* overlay gradient + subtle text */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-3">
+            {p.alt && (
+              <p className="text-xs text-white/90">{p.alt}</p>
+            )}
+          </div>
         </div>
-      </Section>
+      ))}
+  </div>
+</Section>
+
 
       {/* SUBSCRIBE */}
       <Section id="subscribe" title="Get updates" subtitle="Join the list for early drops & discounts.">
