@@ -1,163 +1,240 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Ticket } from "lucide-react";
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-export type HeroProps = {
-  title: string;
+/**
+ * HeroPro – a polished, no‑timer, swipeable hero.
+ * - Fixed, consistent height on all screens (prevents “strip” thumbnails on mobile)
+ * - Manual navigation (arrows + dots). No auto‑advance.
+ * - Optional per‑slide captions (so image‑only slides don’t show text)
+ * - Accessible: buttons are keyboard‑focusable, SR labels included
+ * - Next/Image with fill + object-cover for crisp scaling
+ */
+
+export type HeroProProps = {
+  title?: string;
   subtitle?: string;
-  backgroundImages: string[];
-  overlayOpacity?: number;     // 0–1
-  slideIntervalMs?: number;    // default 6000
+  images: Array<{
+    src: string;
+    alt?: string;
+    /** If true, show the text overlay on this slide; otherwise hide text. */
+    showText?: boolean;
+  }>;
+  overlayOpacity?: number; // 0–1
+  ctas?: Array<{ label: string; href: string }>; // optional primary/secondary
   event?: {
     name: string;
-    dateISO?: string;
+    dateISO: string;
     location?: string;
     ticketUrl?: string;
-  };
-  ctas?: {
-    primary?: { label: string; href: string };
-  };
+  } | null;
+  className?: string;
 };
 
-export default function Hero({
-  title,
-  subtitle,
-  backgroundImages,
-  overlayOpacity = 0.6,
-  slideIntervalMs = 6000,
-  event,
+export default function HeroPro({
+  title = "LEKKI Entertainment",
+  subtitle = "Premium Afrobeats, culture, and nightlife · Denver · Aurora · Colorado Springs",
+  images,
+  overlayOpacity = 0.55,
   ctas,
-}: HeroProps) {
+  event,
+  className = "",
+}: HeroProProps) {
   const [index, setIndex] = useState(0);
-  const [now, setNow] = useState<Date | null>(null);
+  const total = images?.length ?? 0;
+  const trackRef = useRef<HTMLDivElement | null>(null);
 
-  // rotate background
+  // AUTO SCROLL
+useEffect(() => {
+  if (total <= 1) return;
+  const interval = setInterval(() => {
+    setIndex((prev) => (prev + 1) % total);
+  }, 5000); // 5 seconds per slide
+  return () => clearInterval(interval);
+}, [total]);
+
+
+  // Clamp index if images array changes
   useEffect(() => {
-    if (backgroundImages.length <= 1) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % backgroundImages.length), slideIntervalMs);
-    return () => clearInterval(id);
-  }, [backgroundImages.length, slideIntervalMs]);
+    if (index >= total) setIndex(0);
+  }, [total, index]);
 
-  // countdown
+  const goTo = useCallback((i: number) => {
+    setIndex((prev) => {
+      const next = (i + total) % total;
+      // Smooth translate
+      const track = trackRef.current;
+      if (track) {
+        const w = track.clientWidth;
+        track.style.transform = `translateX(-${next * w}px)`;
+      }
+      return next;
+    });
+  }, [total]);
+
+  const prev = useCallback(() => goTo(index - 1), [index, goTo]);
+  const next = useCallback(() => goTo(index + 1), [index, goTo]);
+
+  // Resize observer to keep translate in sync on viewport changes
   useEffect(() => {
-    if (!event?.dateISO) return;
-    setNow(new Date());
-    const id = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(id);
-  }, [event?.dateISO]);
+    const track = trackRef.current;
+    if (!track) return;
+    const ro = new ResizeObserver(() => {
+      const w = track.clientWidth;
+      track.style.transform = `translateX(-${index * w}px)`;
+    });
+    ro.observe(track);
+    return () => ro.disconnect();
+  }, [index]);
 
-  const countdown = useMemo(() => {
-    if (!event?.dateISO || !now) return null;
-    const target = new Date(event.dateISO).getTime();
-    const diff = target - now.getTime();
-    if (diff <= 0) return "Happening now";
-    const s = Math.floor(diff / 1000);
-    const d = Math.floor(s / 86400);
-    const h = Math.floor((s % 86400) / 3600).toString().padStart(2, "0");
-    const m = Math.floor((s % 3600) / 60).toString().padStart(2, "0");
-    const sec = (s % 60).toString().padStart(2, "0");
-    return `${d}d ${h}:${m}:${sec}`;
-  }, [event?.dateISO, now]);
+  const overlayBg = useMemo(
+    () => `rgba(0,0,0,${Math.max(0, Math.min(overlayOpacity, 1))})`,
+    [overlayOpacity]
+  );
+
+  if (!images || images.length === 0) return null;
 
   return (
-    <section className="relative isolate">
-      {/* Background slideshow */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={index}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.9, ease: "easeOut" }}
-            className="absolute inset-0"
-          >
-            <Image
-              src={backgroundImages[index]}
-              alt="Background"
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover"
-            />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "radial-gradient(1200px 600px at 20% 10%, rgba(0,0,0,0.45), transparent), radial-gradient(1000px 500px at 80% 90%, rgba(0,0,0,0.5), transparent)",
-              }}
-            />
-            <div
-              className="absolute inset-0"
-              style={{ backgroundColor: `rgba(0,0,0,${overlayOpacity})` }}
-            />
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Content varies per slide */}
-      <div className="mx-auto max-w-7xl px-4 py-20 sm:py-28 lg:py-36">
-        <motion.div
-          initial={{ y: -18, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="max-w-3xl"
+    <section
+      className={
+        "relative isolate w-full overflow-hidden rounded-none " +
+        // Height rules: stable across breakpoints to avoid squished strips
+        "h-[78vh] min-h-[560px] max-h-[920px] sm:h-[80vh] " +
+        className
+      }
+      aria-roledescription="carousel"
+      aria-label="Hero"
+    >
+      {/* Slides track */}
+      <div className="absolute inset-0">
+        <div
+          ref={trackRef}
+          className="h-full w-full flex transition-transform duration-500 ease-out"
+          style={{ transform: `translateX(-${index * 100}%)` }}
         >
-          {/* ---------- SLIDE 1: brand intro ---------- */}
-          {index === 0 && (
-            <>
-              <h1 className="text-[28px] font-semibold tracking-tight text-white sm:text-5xl md:text-6xl">
-                {title}
-              </h1>
-              {subtitle && (
-                <p className="mt-3 max-w-2xl text-base text-white/85 sm:text-lg">
-                  {subtitle}
-                </p>
-              )}
-              {ctas?.primary && (
-                <div className="mt-6">
-                  <Link
-                    href={event?.ticketUrl || ctas.primary.href}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-white/95 px-5 py-3 font-medium text-gray-900 shadow-lg shadow-black/20 transition hover:bg-white"
-                  >
-                    <Ticket className="h-5 w-5" />
-                    {ctas.primary.label}
-                  </Link>
-                </div>
-              )}
-            </>
-          )}
-
-          {/* ---------- SLIDE 2: upcoming event ---------- */}
-          {index === 1 && event && (
-            <div className="text-white">
-              <h2 className="text-2xl font-semibold sm:text-4xl">
-                Upcoming Event
-              </h2>
-              <p className="mt-3 text-lg sm:text-xl font-medium text-white/90">
-                {event.name}
-              </p>
-              {event.location && (
-                <p className="mt-2 text-white/75">{event.location}</p>
-              )}
-              {countdown && (
-                <p className="mt-2 text-sm text-white/70">
-                  Starts in {countdown}
-                </p>
-              )}
+          {images.map((img, i) => (
+            <div key={i} className="relative h-full w-full shrink-0 grow-0 basis-full">
+              <Image
+                src={img.src}
+                alt={img.alt ?? "Hero image"}
+                fill
+                priority={i === 0}
+                sizes="100vw"
+                className="object-cover object-center"
+              />
+              {/* gradient top/bottom for legible overlay */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    `linear-gradient(180deg, ${overlayBg} 0%, rgba(0,0,0,0.15) 30%, rgba(0,0,0,0.25) 60%, ${overlayBg} 100%)`,
+                }}
+                aria-hidden
+              />
             </div>
-          )}
-
-          {/* ---------- SLIDE 3+: intentionally blank ---------- */}
-        </motion.div>
+          ))}
+        </div>
       </div>
 
-      {/* Fade overlay */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/70 to-transparent" />
+      {/* Copy overlay (only on slides with showText) */}
+      {images[index]?.showText !== false && (
+        <div className="relative z-10 mx-auto flex h-full max-w-6xl items-center px-4">
+          <div className="w-full text-center sm:text-left">
+            <p className="inline-block rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-wider text-white/80 backdrop-blur">
+              Afrobeats • Nightlife • Culture
+            </p>
+            <h1 className="mt-4 text-3xl font-bold leading-tight text-white sm:text-5xl">
+              {title}
+            </h1>
+            {subtitle && (
+              <p className="mt-3 max-w-2xl text-base text-white/80 sm:text-lg">
+                {subtitle}
+              </p>
+            )}
+
+            {/* Optional event microcard */}
+            {event && (
+              <div className="mt-5 inline-flex max-w-xl items-center gap-3 rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white/90 shadow-lg backdrop-blur">
+                <span className="inline-flex h-2 w-2 rounded-full bg-emerald-400" aria-hidden />
+                <div className="flex flex-col sm:flex-row sm:items-center sm:gap-3">
+                  <strong className="font-semibold">{event.name}</strong>
+                  <span className="opacity-80">• {formatDate(event.dateISO)}</span>
+                  {event.location && (
+                    <span className="opacity-80">• {event.location}</span>
+                  )}
+                </div>
+                {event.ticketUrl && (
+                  <Link
+                    href={event.ticketUrl}
+                    className="ml-auto inline-flex items-center rounded-xl border border-white/10 bg-white/10 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/20"
+                  >
+                    Details
+                  </Link>
+                )}
+              </div>
+            )}
+
+            {/* CTAs */}
+            {ctas && ctas.length > 0 && (
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                {ctas.map((c, i) => (
+                  <Link
+                    key={i}
+                    href={c.href}
+                    className="inline-flex items-center justify-center rounded-2xl border border-white/10 bg-white/90 px-5 py-2 text-sm font-semibold text-black hover:bg-white"
+                  >
+                    {c.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Controls */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-5 z-10 mx-auto flex max-w-6xl items-center justify-between px-4">
+        <button
+          onClick={prev}
+          aria-label="Previous slide"
+          className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur transition hover:bg-black/60 focus:outline-none focus:ring-2 focus:ring-white/60"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div className="pointer-events-auto flex items-center gap-2 rounded-full bg-black/40 px-2 py-1 backdrop-blur">
+          {images.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              className={`h-2.5 w-2.5 rounded-full transition ${i === index ? "bg-white" : "bg-white/40 hover:bg-white/70"}`}
+            />
+          ))}
+        </div>
+        <button
+          onClick={next}
+          aria-label="Next slide"
+          className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur transition hover:bg-black/60 focus:outline-none focus:ring-2 focus:ring-white/60"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
     </section>
   );
+}
+
+function formatDate(iso: string) {
+  try {
+    const dt = new Date(iso);
+    return dt.toLocaleString(undefined, {
+      month: "short",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch {
+    return iso;
+  }
 }

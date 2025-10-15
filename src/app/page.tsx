@@ -8,44 +8,49 @@ import EventCard from "@/components/EventCard";
 import { Button, Card, Pill } from "@/components/UI";
 import CountdownCard from "@/components/countdownCard";
 import Hero from "@/components/EnhancedHero";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import GalleryWall from "@/components/GalleryWall";
+
+
+
 
 
 export default function HomePage() {
   const featured = events?.[0];
 
-  return (
+return (
     <div className="bg-transparent">
-      {/* HERO — minimal, brand-forward */}
-    <Hero
-  title="LEKKI Entertainment"
-  subtitle="Premium Afrobeats, culture, and nightlife · Denver · Aurora · Colorado Springs"
-  backgroundImages={[
-    "/images/hero-crowd.jpg",
-    "/images/hero.jpg",
-    "/images/hero-dj.jpg",
-  ]}
-  overlayOpacity={0.55}
-  event={{
-    name: "Wedding After",
-    dateISO: "2025-10-19T21:00:00-06:00",
-    location: "3820 hancock expy,Colorado Springs, CO",
-    ticketUrl: "/events/nigerian-independence-colorado-springs",
-  }}
-  ctas={{
-    primary: { label: "Get Tickets", href: "/events" },
-  }}
-/>
+      {/* HERO — minimal, brand-forward, NO TIMER */}
+      <Hero
+        title="LEKKI Entertainment"
+        subtitle="Premium Afrobeats, culture, and nightlife · Denver · Aurora · Colorado Springs"
+        images={[
+          { src: "/images/hero-crowd.jpg", alt: "Packed Afrobeats crowd", showText: true },
+          { src: "/images/hero.jpg", alt: "Lights + energy", showText: false },
+          { src: "/images/hero-dj.jpg", alt: "DJ in the booth", showText: false },
+        ]}
+        overlayOpacity={0.55}
+        event={{
+          name: "Wedding After",
+          dateISO: "2025-10-19T21:00:00-06:00",
+          location: "3820 Hancock Expy, Colorado Springs, CO",
+          ticketUrl: "/events/nigerian-independence-colorado-springs",
+        }}
+        ctas={[{ label: "Get Tickets", href: "/events" }]}
+      />
 
-      {/* COUNTDOWN */}
-      <Section title="Next Event">
-        <div className="mx-auto max-w-3xl">
-          <CountdownCard
-            title="Wedding Afterparty· Colorado Springs"
-            startsAt="2025-10-19T21:00:00-06:00"
-            href="/events/nigerian-independence-colorado-springs"
-          />
-        </div>
-      </Section>
+      {/* …rest of your page (Countdown lives below, unchanged) */}
+    {/* COUNTDOWN */}
+    <Section title="Next Event">
+      <div className="mx-auto max-w-3xl">
+        <CountdownCard
+          title="Wedding Afterparty· Colorado Springs"
+          startsAt="2025-10-19T21:00:00-06:00"
+          href="/events/nigerian-independence-colorado-springs"
+        />
+      </div>
+    </Section>
 
       {/* FEATURED EVENT */}
       <Section title="Featured Event" subtitle="Don’t miss the next big night.">
@@ -81,35 +86,10 @@ export default function HomePage() {
         </div>
       </Section>
 
-     {/* EVENT HIGHLIGHTS — upgraded photo wall */}
+{/* EVENT HIGHLIGHTS — photo wall with staggered fade-up */}
 <Section title="Event Highlights" subtitle="Energy. Vibes. Afrobeats.">
-  <div className="columns-2 sm:columns-3 md:columns-4 gap-2 space-y-2">
-    {events
-      .flatMap((e) => e.photos || [])
-      .slice(0, 16)
-      .map((p, i) => (
-        <div
-          key={i}
-          className="relative overflow-hidden rounded-xl group cursor-pointer break-inside-avoid"
-        >
-          <Image
-            src={p.src}
-            alt={p.alt || "Event"}
-            width={800}
-            height={600}
-            className="object-cover w-full h-auto transform transition-transform duration-500 group-hover:scale-110 group-hover:brightness-110"
-          />
-          {/* overlay gradient + subtle text */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-3">
-            {p.alt && (
-              <p className="text-xs text-white/90">{p.alt}</p>
-            )}
-          </div>
-        </div>
-      ))}
-  </div>
+  <GalleryWall events={events} />
 </Section>
-
 
       {/* SUBSCRIBE */}
       <Section id="subscribe" title="Get updates" subtitle="Join the list for early drops & discounts.">
