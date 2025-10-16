@@ -43,14 +43,14 @@ export default function AboutPage() {
           muted
           loop
           playsInline
-          poster="/images/hero-dj.jpg"
+          poster="/images/hero.jpg"
         >
           <source src="/video/lekki-hero.mp4" type="video/mp4" />
         </video>
 
         {/* Fallback Image for mobile / no video */}
         <Image
-          src="/images/hero-dj.jpg"
+          src="/images/hero.jpg"
           alt="Lekki Entertainment — Nightlife energy"
           fill
           priority
@@ -102,10 +102,10 @@ export default function AboutPage() {
           </h2>
           <p className="mt-6 text-gray-300 leading-relaxed text-lg">
             Born from the heartbeat of Afrobeats culture, Lekki Entertainment
-            connects people through music, nightlife, and unforgettable experiences. What started in our cities grew into a movement — bridging African rhythms with global sounds and modern energy.
+            connects people through music, nightlife, and unforgettable experiences. What started in our cities grew into a movement, bridging African rhythms with global sounds and modern energy.
           </p>
           <p className="mt-5 text-gray-400 leading-relaxed">
-            From Colorado to Dallas and beyond, our mission is simple: curate nights that feel like home to the diaspora — where everyone can dance, laugh, and belong. Lekki isn’t just an event; it’s a statement of culture, creativity, and connection.
+            From Nigeria to Colorado and beyond, our mission is simple: curate nights that feel like home to the diaspora — where everyone can dance, laugh, and belong. Lekki isn’t just an event; it’s a statement of culture, creativity, and connection.
           </p>
         </div>
       </section>
@@ -164,7 +164,7 @@ export default function AboutPage() {
       <section className="bg-[#0b0b0b] py-20">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <blockquote className="text-2xl sm:text-3xl leading-relaxed text-white">
-            “Every Lekki night feels like stepping into Lagos energy with a Colorado skyline — pure joy, no pretense.”
+            “Every Lekki night feels like stepping into Lagos energy with a Colorado skyline, pure joy, no pretense.”
           </blockquote>
           <div className="mt-4 text-sm text-white/60">— Guest Review</div>
         </div>
@@ -176,8 +176,7 @@ export default function AboutPage() {
           <div>
             <h3 className="text-2xl font-semibold">Who We Are</h3>
             <p className="mt-4 text-gray-300">
-              Lekki Entertainment is a collective of curators, DJs, hosts, and designers bringing a modern African lens to nightlife. We obsess over the details — sound, lighting, flow — so the only thing you need to do is show up and enjoy.
-            </p>
+Lekki Entertainment is a collective of curators, DJs, hosts, and designers bringing a modern African lens to nightlife. We obsess over the details like sound, lighting, and flow so the only thing you need to do is show up and enjoy.            </p>
             <p className="mt-4 text-gray-400">
               Want to collaborate or book us for your city? Let’s talk.
             </p>
@@ -224,7 +223,7 @@ export default function AboutPage() {
               Upcoming Events
             </Link>
             <a
-              href="https://instagram.com/lekkientertainment"
+              href="https://www.instagram.com/lekki.cos/"
               target="_blank"
               className="rounded-2xl border border-white/20 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"
             >

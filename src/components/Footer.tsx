@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 /* ----------------------------- CONFIG HERE ----------------------------- */
 const SOCIALS = [
-  { href: "https://www.instagram.com/lekki.cos?igsh=Z3A3ejF3NTRnYWhz&utm_source=qr", label: "Instagram", icon: InstagramIcon },
+  { href: "https://www.instagram.com/lekki.cos/", label: "Instagram", icon: InstagramIcon },
   { href: "https://tiktok.com/@lekkientertainment", label: "TikTok", icon: TikTokIcon },
   { href: "http://youtube.com/@LekkiRoomvybz", label: "YouTube", icon: YoutubeIcon },
   { href: "https://x.com/lekkientertain", label: "Twitter / X", icon: XIcon },
