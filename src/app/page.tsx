@@ -8,7 +8,6 @@ import EventCard from "@/components/EventCard";
 import { Button, Card, Pill } from "@/components/UI";
 import CountdownCard from "@/components/countdownCard";
 import Hero from "@/components/EnhancedHero";
-import AOS from "aos";
 import "aos/dist/aos.css";
 import GalleryWall from "@/components/GalleryWall";
 
