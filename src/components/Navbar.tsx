@@ -24,7 +24,7 @@ export default function Navbar() {
 
   // Close on ESC
   useEffect(() => {
-    function onKey(e: KeyboardEvent) {
+    function onKey(e) {
       if (e.key === "Escape") setOpen(false);
     }
     window.addEventListener("keydown", onKey);
@@ -77,11 +77,12 @@ export default function Navbar() {
                 key={l.href}
                 href={l.href}
                 className={`u-underline-slide relative transition ${
-                  active ? "font-semibold text-lekki-primary" : "text-lekki-subtext hover:text-lekki-accent"
+                  active
+                    ? "font-semibold text-lekki-primary"
+                    : "text-lekki-subtext hover:text-lekki-accent"
                 }`}
               >
                 {l.label}
-                {/* Active underline indicator */}
                 <span
                   className={`absolute -bottom-1 left-0 h-[2px] bg-lekki-primary transition-transform duration-200 ${
                     active ? "w-full" : "w-0"
@@ -106,11 +107,26 @@ export default function Navbar() {
           aria-expanded={open}
           aria-controls={menuId}
         >
-          <svg className="h-6 w-6 text-lekki-text" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="h-6 w-6 text-lekki-text"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             {open ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M6 18L18 6M6 6l12 12" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                d="M6 18L18 6M6 6l12 12"
+              />
             ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 6h16M4 12h16M4 18h16" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             )}
           </svg>
         </button>
@@ -129,7 +145,7 @@ export default function Navbar() {
       {open && (
         <button
           aria-hidden
-          className="fixed inset-0 z-40 block bg-black/30 md:hidden"
+          className="fixed inset-0 z-30 block bg-black/30 md:hidden"
           onClick={() => setOpen(false)}
         />
       )}
@@ -140,17 +156,19 @@ export default function Navbar() {
         className={[
           "md:hidden border-t border-zinc-800 bg-lekki-panel/90 backdrop-blur-md",
           "overflow-hidden transition-all duration-300 ease-out",
+          "relative z-50", // ensures above overlay
           open ? "max-h-[320px] opacity-100" : "max-h-0 opacity-0",
         ].join(" ")}
         aria-hidden={!open}
       >
-        <div className="z-50 flex flex-col gap-2 px-4 py-3 text-sm">
+        <div className="flex flex-col gap-2 px-4 py-3 text-sm">
           {links.map((l) => {
             const active = pathname === l.href;
             return (
               <Link
                 key={l.href}
                 href={l.href}
+                onClick={() => setOpen(false)} // closes menu on click
                 className={`u-underline-slide relative rounded-md px-3 py-2 transition ${
                   active
                     ? "bg-white/5 font-semibold text-lekki-primary"
@@ -158,7 +176,6 @@ export default function Navbar() {
                 }`}
               >
                 {l.label}
-                {/* Active underline indicator */}
                 <span
                   className={`absolute -bottom-1 left-3 h-[2px] bg-lekki-primary transition-transform duration-200 ${
                     active ? "w-2/3" : "w-0"
@@ -169,6 +186,7 @@ export default function Navbar() {
           })}
           <Link
             href="#subscribe"
+            onClick={() => setOpen(false)}
             className="u-hover-lift rounded-md bg-lekki-primary px-3 py-2 text-center font-medium text-white transition-all duration-200 hover:bg-lekki-accent"
           >
             Get Updates

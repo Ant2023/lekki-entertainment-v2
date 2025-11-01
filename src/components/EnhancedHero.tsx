@@ -5,25 +5,18 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 /**
- * HeroPro – a polished, no‑timer, swipeable hero.
- * - Fixed, consistent height on all screens (prevents “strip” thumbnails on mobile)
- * - Manual navigation (arrows + dots). No auto‑advance.
- * - Optional per‑slide captions (so image‑only slides don’t show text)
- * - Accessible: buttons are keyboard‑focusable, SR labels included
- * - Next/Image with fill + object-cover for crisp scaling
+ * HeroPro – polished hero with optional auto-rotate + manual controls.
+ * - Fixed height across breakpoints (prevents squished strips on mobile)
+ * - Percent-based translate only (smooth, no layout jump)
+ * - Background layers ignore clicks; foreground is clickable
  */
 
 export type HeroProProps = {
   title?: string;
   subtitle?: string;
-  images: Array<{
-    src: string;
-    alt?: string;
-    /** If true, show the text overlay on this slide; otherwise hide text. */
-    showText?: boolean;
-  }>;
+  images: Array<{ src: string; alt?: string; showText?: boolean }>;
   overlayOpacity?: number; // 0–1
-  ctas?: Array<{ label: string; href: string }>; // optional primary/secondary
+  ctas?: Array<{ label: string; href: string }>;
   event?: {
     name: string;
     dateISO: string;
@@ -31,6 +24,7 @@ export type HeroProProps = {
     ticketUrl?: string;
   } | null;
   className?: string;
+  autoRotateMs?: number; // set to 0 to disable auto-rotate (default 5000)
 };
 
 export default function HeroPro({
@@ -41,53 +35,47 @@ export default function HeroPro({
   ctas,
   event,
   className = "",
+  autoRotateMs = 5000,
 }: HeroProProps) {
   const [index, setIndex] = useState(0);
   const total = images?.length ?? 0;
   const trackRef = useRef<HTMLDivElement | null>(null);
 
-  // AUTO SCROLL
-useEffect(() => {
-  if (total <= 1) return;
-  const interval = setInterval(() => {
-    setIndex((prev) => (prev + 1) % total);
-  }, 5000); // 5 seconds per slide
-  return () => clearInterval(interval);
-}, [total]);
+  // ===== Auto-rotate (gentle) =====
+  useEffect(() => {
+    if (total <= 1 || !autoRotateMs) return;
+    let id = window.setInterval(() => {
+      setIndex((i) => (i + 1) % total);
+    }, autoRotateMs);
 
+    // Pause when tab hidden
+    const onVis = () => {
+      if (document.hidden) {
+        clearInterval(id);
+      } else {
+        id = window.setInterval(() => setIndex((i) => (i + 1) % total), autoRotateMs);
+      }
+    };
+    document.addEventListener("visibilitychange", onVis);
 
-  // Clamp index if images array changes
+    return () => {
+      clearInterval(id);
+      document.removeEventListener("visibilitychange", onVis);
+    };
+  }, [total, autoRotateMs]);
+
+  // Clamp if images change
   useEffect(() => {
     if (index >= total) setIndex(0);
   }, [total, index]);
 
   const goTo = useCallback((i: number) => {
-    setIndex((prev) => {
-      const next = (i + total) % total;
-      // Smooth translate
-      const track = trackRef.current;
-      if (track) {
-        const w = track.clientWidth;
-        track.style.transform = `translateX(-${next * w}px)`;
-      }
-      return next;
-    });
+    if (!total) return;
+    setIndex(((i % total) + total) % total);
   }, [total]);
 
   const prev = useCallback(() => goTo(index - 1), [index, goTo]);
   const next = useCallback(() => goTo(index + 1), [index, goTo]);
-
-  // Resize observer to keep translate in sync on viewport changes
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    const ro = new ResizeObserver(() => {
-      const w = track.clientWidth;
-      track.style.transform = `translateX(-${index * w}px)`;
-    });
-    ro.observe(track);
-    return () => ro.disconnect();
-  }, [index]);
 
   const overlayBg = useMemo(
     () => `rgba(0,0,0,${Math.max(0, Math.min(overlayOpacity, 1))})`,
@@ -100,18 +88,17 @@ useEffect(() => {
     <section
       className={
         "relative isolate w-full overflow-hidden rounded-none " +
-        // Height rules: stable across breakpoints to avoid squished strips
         "h-[78vh] min-h-[560px] max-h-[920px] sm:h-[80vh] " +
         className
       }
       aria-roledescription="carousel"
       aria-label="Hero"
     >
-      {/* Slides track */}
-      <div className="absolute inset-0">
+      {/* Slides track (background should NOT block clicks) */}
+      <div className="absolute inset-0 pointer-events-none">
         <div
           ref={trackRef}
-          className="h-full w-full flex transition-transform duration-500 ease-out"
+          className="flex h-full w-full transition-transform duration-500 ease-out"
           style={{ transform: `translateX(-${index * 100}%)` }}
         >
           {images.map((img, i) => (
@@ -124,12 +111,11 @@ useEffect(() => {
                 sizes="100vw"
                 className="object-cover object-center"
               />
-              {/* gradient top/bottom for legible overlay */}
+              {/* gradient top/bottom for legibility */}
               <div
                 className="absolute inset-0"
                 style={{
-                  background:
-                    `linear-gradient(180deg, ${overlayBg} 0%, rgba(0,0,0,0.15) 30%, rgba(0,0,0,0.25) 60%, ${overlayBg} 100%)`,
+                  background: `linear-gradient(180deg, ${overlayBg} 0%, rgba(0,0,0,0.15) 30%, rgba(0,0,0,0.25) 60%, ${overlayBg} 100%)`,
                 }}
                 aria-hidden
               />
@@ -138,9 +124,9 @@ useEffect(() => {
         </div>
       </div>
 
-      {/* Copy overlay (only on slides with showText) */}
+      {/* Foreground copy (clickable) */}
       {images[index]?.showText !== false && (
-        <div className="relative z-10 mx-auto flex h-full max-w-6xl items-center px-4">
+        <div className="relative z-10 mx-auto flex h-full max-w-6xl items-center px-4 pointer-events-auto">
           <div className="w-full text-center sm:text-left">
             <p className="inline-block rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-wider text-white/80 backdrop-blur">
               Afrobeats • Nightlife • Culture
@@ -161,9 +147,7 @@ useEffect(() => {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:gap-3">
                   <strong className="font-semibold">{event.name}</strong>
                   <span className="opacity-80">• {formatDate(event.dateISO)}</span>
-                  {event.location && (
-                    <span className="opacity-80">• {event.location}</span>
-                  )}
+                  {event.location && <span className="opacity-80">• {event.location}</span>}
                 </div>
                 {event.ticketUrl && (
                   <Link
@@ -194,7 +178,7 @@ useEffect(() => {
         </div>
       )}
 
-      {/* Controls */}
+      {/* Controls (clickable) */}
       <div className="pointer-events-none absolute inset-x-0 bottom-5 z-10 mx-auto flex max-w-6xl items-center justify-between px-4">
         <button
           onClick={prev}

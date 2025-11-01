@@ -30,10 +30,10 @@ return (
         ]}
         overlayOpacity={0.55}
         event={{
-          name: "Wedding After",
-          dateISO: "2025-10-19T21:00:00-06:00",
-          location: "3820 Hancock Expy, Colorado Springs, CO",
-          ticketUrl: "/events/nigerian-independence-colorado-springs",
+          name: "Friendsgiving Party ",
+          dateISO: "2025-11-22T20:00:00-06:00",
+          location: "Colorado Springs, CO",
+          ticketUrl: "TBA",
         }}
         ctas={[{ label: "Get Tickets", href: "/events" }]}
       />
@@ -44,7 +44,7 @@ return (
       <div className="mx-auto max-w-3xl">
         <CountdownCard
           title="Wedding Afterparty· Colorado Springs"
-          startsAt="2025-10-19T21:00:00-06:00"
+          startsAt="2025-10-19T20:00:00-06:00"
           href="/events/nigerian-independence-colorado-springs"
         />
       </div>
