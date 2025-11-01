@@ -24,12 +24,13 @@ export default function Navbar() {
 
   // Close on ESC
   useEffect(() => {
-    function onKey(e) {
-      if (e.key === "Escape") setOpen(false);
-    }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key === "Escape") setOpen(false);
+  };
+
+  window.addEventListener("keydown", onKey);
+  return () => window.removeEventListener("keydown", onKey);
+}, []);
 
   // Scroll progress (0..100)
   useEffect(() => {

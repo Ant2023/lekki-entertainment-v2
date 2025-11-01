@@ -14,18 +14,25 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 export type HeroProProps = {
   title?: string;
   subtitle?: string;
-   eyebrow?: string;
-  images: Array<{ src: string; alt?: string; showText?: boolean; title?: string;
+  eyebrow?: string;
+  images: Array<{
+    src: string;
+    alt?: string;
+    showText?: boolean;
+    title?: string;
     subtitle?: string;
-    eyebrow?: string; }>;
+    eyebrow?: string;
+  }>;
   overlayOpacity?: number; // 0–1
   ctas?: Array<{ label: string; href: string }>;
-  event?: {
-    name: string;
-    dateISO: string;
-    location?: string;
-    ticketUrl?: string;
-  } | null;
+  event?:
+    | {
+        name: string;
+        dateISO: string;
+        location?: string;
+        ticketUrl?: string;
+      }
+    | null;
   className?: string;
   autoRotateMs?: number; // set to 0 to disable auto-rotate (default 5000)
 };
@@ -33,7 +40,6 @@ export type HeroProProps = {
 export default function HeroPro({
   title = "LEKKI Entertainment",
   subtitle = "Premium Afrobeats, culture, and nightlife · Denver · Aurora · Colorado Springs",
-  
   images,
   overlayOpacity = 0.55,
   ctas,
@@ -52,7 +58,6 @@ export default function HeroPro({
       setIndex((i) => (i + 1) % total);
     }, autoRotateMs);
 
-    // Pause when tab hidden
     const onVis = () => {
       if (document.hidden) {
         clearInterval(id);
@@ -73,10 +78,13 @@ export default function HeroPro({
     if (index >= total) setIndex(0);
   }, [total, index]);
 
-  const goTo = useCallback((i: number) => {
-    if (!total) return;
-    setIndex(((i % total) + total) % total);
-  }, [total]);
+  const goTo = useCallback(
+    (i: number) => {
+      if (!total) return;
+      setIndex(((i % total) + total) % total);
+    },
+    [total]
+  );
 
   const prev = useCallback(() => goTo(index - 1), [index, goTo]);
   const next = useCallback(() => goTo(index + 1), [index, goTo]);
@@ -139,9 +147,7 @@ export default function HeroPro({
               {title}
             </h1>
             {subtitle && (
-              <p className="mt-3 max-w-2xl text-base text-white/80 sm:text-lg">
-                {subtitle}
-              </p>
+              <p className="mt-3 max-w-2xl text-base text-white/80 sm:text-lg">{subtitle}</p>
             )}
 
             {/* Optional event microcard */}
@@ -189,7 +195,18 @@ export default function HeroPro({
           aria-label="Previous slide"
           className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur transition hover:bg-black/60 focus:outline-none focus:ring-2 focus:ring-white/60"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="m15 18-6-6 6-6" />
+          </svg>
         </button>
         <div className="pointer-events-auto flex items-center gap-2 rounded-full bg-black/40 px-2 py-1 backdrop-blur">
           {images.map((_, i) => (
@@ -197,7 +214,9 @@ export default function HeroPro({
               key={i}
               onClick={() => goTo(i)}
               aria-label={`Go to slide ${i + 1}`}
-              className={`h-2.5 w-2.5 rounded-full transition ${i === index ? "bg-white" : "bg-white/40 hover:bg-white/70"}`}
+              className={`h-2.5 w-2.5 rounded-full transition ${
+                i === index ? "bg-white" : "bg-white/40 hover:bg-white/70"
+              }`}
             />
           ))}
         </div>
@@ -206,7 +225,18 @@ export default function HeroPro({
           aria-label="Next slide"
           className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur transition hover:bg-black/60 focus:outline-none focus:ring-2 focus:ring-white/60"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="m9 18 6-6-6-6" />
+          </svg>
         </button>
       </div>
     </section>
