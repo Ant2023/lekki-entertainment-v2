@@ -43,8 +43,8 @@ return (
     <Section title="Next Event">
       <div className="mx-auto max-w-3xl">
         <CountdownCard
-          title="Wedding Afterparty· Colorado Springs"
-          startsAt="2025-10-19T20:00:00-06:00"
+          title="Friendsgiving Party . Colorado Springs"
+          startsAt="2025-11-22T20:00:00-06:00"
           href="/events/nigerian-independence-colorado-springs"
         />
       </div>
