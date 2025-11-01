@@ -14,7 +14,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 export type HeroProProps = {
   title?: string;
   subtitle?: string;
-  images: Array<{ src: string; alt?: string; showText?: boolean }>;
+   eyebrow?: string;
+  images: Array<{ src: string; alt?: string; showText?: boolean; title?: string;
+    subtitle?: string;
+    eyebrow?: string; }>;
   overlayOpacity?: number; // 0–1
   ctas?: Array<{ label: string; href: string }>;
   event?: {
@@ -30,6 +33,7 @@ export type HeroProProps = {
 export default function HeroPro({
   title = "LEKKI Entertainment",
   subtitle = "Premium Afrobeats, culture, and nightlife · Denver · Aurora · Colorado Springs",
+  
   images,
   overlayOpacity = 0.55,
   ctas,
