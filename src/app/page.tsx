@@ -26,7 +26,7 @@ return (
         images={[
           { src: "/images/hero-crowd.jpg", alt: "Packed Afrobeats crowd", showText: true },
           { src: "/images/hero.jpg", alt: "Lights + energy", showText: false },
-          { src: "/images/hero-dj.jpg", alt: "DJ in the booth", showText: false },
+          { src: "/images/denver-10.jpg", alt: "DJ in the booth", showText: false },
         ]}
         overlayOpacity={0.55}
         event={{
@@ -35,7 +35,6 @@ return (
           location: "Colorado Springs, CO",
           ticketUrl: "TBA",
         }}
-        ctas={[{ label: "Get Tickets", href: "/events" }]}
       />
 
       {/* …rest of your page (Countdown lives below, unchanged) */}
