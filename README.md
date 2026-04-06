@@ -14,7 +14,7 @@ Client-facing website built with Next.js. Deployed to production with automated 
 Clone the repo:
 
 ```bash
-git clone https://github.com/your-username/lekki-entertainment-v2.git
+git clone https://github.com/Ant2023/lekki-entertainment-v2.git
 cd lekki-entertainment-v2
 ```
 
@@ -61,4 +61,5 @@ The app is deployed via Vercel.
 
 ## Live
 
-Add link here
+[**LiveWebsite**
+](https://lekki-entertainment-v2.vercel.app/)
