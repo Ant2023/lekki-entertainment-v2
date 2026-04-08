@@ -20,15 +20,6 @@ export const eventType = defineType({
         maxLength: 96,
       },
       hidden: true,
-      initialValue: (doc) => {
-        if (!doc?.title) return undefined;
-        return {
-          current: doc.title
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "-")
-            .replace(/(^-|-$)/g, ""),
-        };
-      },
     }),
     defineField({
       name: "date",
