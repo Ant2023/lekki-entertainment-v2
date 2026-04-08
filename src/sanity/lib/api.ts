@@ -63,7 +63,7 @@ function mapGalleryImage(image: SanityImageLike, fallbackAlt: string): AppGaller
 }
 
 export const EVENTS_QUERY = groq`
-  *[_type == "event"] | order(date desc) {
+  *[_type == "event" && defined(slug.current)] | order(date desc) {
     _id,
     title,
     slug,
@@ -120,6 +120,9 @@ export function mapSiteSettings(siteSettings: SanitySiteSettings | null | undefi
 }
 
 function mapEvent(event: SanityEvent): AppEvent | null {
+  const slug = event.slug?.current;
+  if (!slug) return null;
+
   const coverImage = urlForImage(event.coverImage)?.width(800).height(600).fit("crop").url();
   if (!coverImage) return null;
 
@@ -135,7 +138,7 @@ function mapEvent(event: SanityEvent): AppEvent | null {
     .filter((photo): photo is AppEventPhoto => Boolean(photo));
 
   return {
-    slug: event.slug.current,
+    slug,
     title: event.title,
     date: event.date,
     venue: event.venue,
