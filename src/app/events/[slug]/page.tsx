@@ -1,7 +1,7 @@
-import EventDetailClient from "./EventDetailClient";
-import { getEventBySlug } from "../../../sanity/lib/api";
+"use client";
 
-export default async function EventDetailPage({ params }: { params: { slug: string } }) {
-  const event = await getEventBySlug(params.slug);
-  return <EventDetailClient slug={params.slug} serverEvent={event} />;
+import EventDetailClient from "./EventDetailClient";
+
+export default function EventDetailPage({ params }: { params: { slug: string } }) {
+  return <EventDetailClient slug={params.slug} serverEvent={null} />;
 }
