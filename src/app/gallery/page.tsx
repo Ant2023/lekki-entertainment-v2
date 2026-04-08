@@ -1,18 +1,28 @@
-import Image from 'next/image';
-import Section from '@/components/Section';
-import { events } from '@/data/events';
+import Image from "next/image";
 
-export const dynamic = 'force-static';
+import Section from "../../components/Section";
+import { djamesDenverHighlights } from "../../lib/highlights";
+import { getSiteSettings } from "../../sanity/lib/api";
 
-export default function GalleryPage() {
-  const photos = events.flatMap((e) => e.photos || []);
+export const revalidate = 30;
+
+export default async function GalleryPage() {
+  const { eventHighlights } = await getSiteSettings();
+  const sanityHighlightPhotos = eventHighlights.galleryImages;
+  const photos = [
+    ...sanityHighlightPhotos,
+    ...djamesDenverHighlights.filter(
+      (fallbackPhoto) => !sanityHighlightPhotos.some((photo) => photo.src === fallbackPhoto.src)
+    ),
+  ];
+
   return (
     <Section title="Gallery" subtitle="Highlights from recent events.">
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
         {photos.length ? (
-          photos.map((p, i) => (
-            <div key={i} className="relative h-40 sm:h-48 rounded-xl overflow-hidden border border-zinc-800">
-              <Image src={p.src} alt={p.alt || 'Event photo'} fill className="object-cover" />
+          photos.map((photo, index) => (
+            <div key={`${photo.src}-${index}`} className="relative h-40 overflow-hidden rounded-xl border border-zinc-800 sm:h-48">
+              <Image src={photo.src} alt={photo.alt || "Event photo"} fill className="object-cover" />
             </div>
           ))
         ) : (

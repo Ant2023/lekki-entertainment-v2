@@ -1,64 +1,166 @@
-"use client";
-
-import Image from "next/image";
 import Link from "next/link";
-import Section from "@/components/Section";
-import { events } from "@/data/events";
-import EventCard from "@/components/EventCard";
-import { Button, Card, Pill } from "@/components/UI";
-import CountdownCard from "@/components/countdownCard";
-import Hero from "@/components/EnhancedHero";
-import GalleryWall from "@/components/GalleryWall";
 
+import CountdownCard from "../components/countdownCard";
+import FeaturedEventCard from "../components/FeaturedEventCard";
+import GalleryWall from "../components/GalleryWall";
+import Hero from "../components/EnhancedHero";
+import Section from "../components/Section";
+import { Card } from "../components/UI";
+import { djamesDenverHighlights } from "../lib/highlights";
+import { getSiteSettings } from "../sanity/lib/api";
 
+export const revalidate = 30;
 
+function LekkiPromo() {
+  return (
+    <div className="space-y-3">
+      <p className="text-sm uppercase tracking-widest opacity-90">LEKKI Entertainment</p>
+      <h3 className="text-2xl font-extrabold leading-tight">Afrobeats, Nightlife, Culture</h3>
+      <p className="opacity-90">
+        Curated parties and community across Denver, Aurora, and Colorado Springs.
+        Join the list to get early drops and VIP invites.
+      </p>
+      <div className="flex flex-wrap gap-3">
+        <Link
+          href="/events"
+          className="rounded-xl bg-fuchsia-600 px-4 py-2 font-semibold text-white hover:bg-fuchsia-700"
+        >
+          See All Events
+        </Link>
+        <Link
+          href="/subscribe"
+          className="rounded-xl bg-white/90 px-4 py-2 font-semibold text-black hover:bg-white"
+        >
+          Join Guestlist
+        </Link>
+      </div>
+    </div>
+  );
+}
 
+function HeroIntro() {
+  return (
+    <div className="max-w-xl space-y-4 text-white">
+      <div className="flex flex-wrap items-center gap-2">
+        {["Afrobeats", "Nightlife", "Culture"].map((item) => (
+          <span
+            key={item}
+            className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-white/80 backdrop-blur"
+          >
+            {item}
+          </span>
+        ))}
+      </div>
 
-export default function HomePage() {
-  const featured = events?.[0];
+      <div className="space-y-3">
+        <h1 className="max-w-2xl text-2xl font-semibold leading-snug text-white sm:text-4xl">
+          Afrobeats nights, elevated.
+        </h1>
+        <p className="max-w-xl text-sm leading-6 text-white/72 sm:text-base">
+          Lekki Entertainment presents refined nightlife experiences across Denver, Aurora, and Colorado Springs.
+        </p>
+      </div>
 
-return (
+      <div className="flex flex-wrap gap-3">
+        <Link
+          href="/events"
+          className="inline-flex items-center rounded-2xl bg-fuchsia-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-fuchsia-700"
+        >
+          Explore Events
+        </Link>
+        <Link
+          href="/gallery"
+          className="inline-flex items-center rounded-2xl border border-white/15 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/15"
+        >
+          View Highlights
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+export default async function HomePage() {
+  const { featuredEvent, eventHighlights } = await getSiteSettings();
+  const featuredLocation = [featuredEvent?.venue, featuredEvent?.city].filter(Boolean).join(" · ");
+  const sanityHighlightPhotos = eventHighlights.galleryImages;
+  const highlightPhotos = [
+    ...sanityHighlightPhotos,
+    ...djamesDenverHighlights.filter(
+      (fallbackPhoto) => !sanityHighlightPhotos.some((photo) => photo.src === fallbackPhoto.src)
+    ),
+  ];
+
+  return (
     <div className="bg-transparent">
-      {/* HERO — minimal, brand-forward, NO TIMER */}
       <Hero
         title="LEKKI Entertainment"
-        subtitle="Premium Afrobeats, culture, and nightlife · Denver · Aurora · Colorado Springs"
+        subtitle="Premium Afrobeats, culture, and nightlife in Denver, Aurora, and Colorado Springs"
         images={[
-          { src: "/images/hero-crowd.jpg", alt: "Packed Afrobeats crowd", showText: true },
-          { src: "/images/hero.jpg", alt: "Lights + energy", showText: false },
-          { src: "/images/denver-10.jpg", alt: "DJ in the booth", showText: false },
+          {
+            src: "/images/hero-crowd.jpg",
+            alt: "Packed Afrobeats crowd",
+            content: <HeroIntro />,
+            contentWrap: "none",
+          },
+          {
+            src: featuredEvent?.flyer || "/images/hero.jpg",
+            alt: featuredEvent?.title || "Lights and nightlife energy",
+            showText: !featuredEvent?.date,
+            content: featuredEvent?.date ? (
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm uppercase tracking-[0.2em] text-white/70">Featured Event</p>
+                  <h3 className="mt-2 text-2xl font-bold text-white">{featuredEvent.title}</h3>
+                  {featuredLocation ? <p className="mt-1 text-sm text-white/75">{featuredLocation}</p> : null}
+                </div>
+                <CountdownCard
+                  title={featuredEvent.title}
+                  startsAt={featuredEvent.date}
+                  href={featuredEvent.ticketUrl}
+                  buttonLabel={featuredEvent.buttonLabel}
+                />
+              </div>
+            ) : undefined,
+          },
+          {
+            src: "/images/denver-10.jpg",
+            alt: "DJ in the booth",
+            content: <LekkiPromo />,
+          },
         ]}
         overlayOpacity={0.55}
-        event={{
-          name: "Friendsgiving Party ",
-          dateISO: "2025-11-22T20:00:00-06:00",
-          location: "Colorado Springs, CO",
-          ticketUrl: "TBA",
-        }}
+        autoRotateMs={10000}
+        event={
+          featuredEvent
+            ? {
+                name: featuredEvent.title,
+                dateISO: featuredEvent.date || new Date().toISOString(),
+                location: featuredLocation,
+                ticketUrl: featuredEvent.ticketUrl,
+              }
+            : null
+        }
       />
 
-      {/* …rest of your page (Countdown lives below, unchanged) */}
-    {/* COUNTDOWN */}
-    <Section title="Next Event">
-      <div className="mx-auto max-w-3xl">
-        <CountdownCard
-          title="Friendsgiving Party . Colorado Springs"
-          startsAt="2025-11-22T20:00:00-06:00"
-          href="/events/nigerian-independence-colorado-springs"
-        />
-      </div>
-    </Section>
-
-      {/* FEATURED EVENT */}
-      <Section title="Featured Event" subtitle="Don’t miss the next big night.">
+      <Section>
+        <div className="mb-6 flex items-end gap-4 border-b border-white/10 pb-4">
+          <div className="space-y-2">
+            <p className="text-[11px] uppercase tracking-[0.22em] text-white/45">Curated Moment</p>
+            <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">Featured Event</h2>
+          </div>
+          <div className="hidden h-px flex-1 bg-gradient-to-r from-white/15 to-transparent sm:block" />
+        </div>
         <div className="grid">
-          {featured && (
-            <EventCard e={{ ...featured, coverImage: "/images/hero-dj.jpg" }} />
+          {featuredEvent ? (
+            <FeaturedEventCard event={featuredEvent} />
+          ) : (
+            <Card className="card-glass p-6">
+              <p className="text-sm text-lekki-subtext">Add a featured event in Sanity Studio to show it here.</p>
+            </Card>
           )}
         </div>
       </Section>
 
-      {/* VALUE PROPS */}
       <Section>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {[
@@ -74,22 +176,29 @@ return (
               h: "Easy Tickets",
               p: "Buy securely on our ticket partner, straight from each event.",
             },
-          ].map((x, i) => (
-            <Card key={i} className="card-glass p-6">
-              <h3 className="font-semibold text-white">{x.h}</h3>
-              <p className="mt-2 text-sm text-lekki-subtext">{x.p}</p>
+          ].map((item, index) => (
+            <Card key={index} className="card-glass p-6">
+              <h3 className="font-semibold text-white">{item.h}</h3>
+              <p className="mt-2 text-sm text-lekki-subtext">{item.p}</p>
             </Card>
           ))}
         </div>
       </Section>
 
-{/* EVENT HIGHLIGHTS — photo wall with staggered fade-up */}
-<Section title="Event Highlights" subtitle="Energy. Vibes. Afrobeats.">
-  <GalleryWall events={events} />
-</Section>
+      <Section>
+        <div className="mb-6 flex items-end gap-4 border-b border-white/10 pb-4">
+          <div className="space-y-2">
+            <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">{eventHighlights.title}</h2>
+            {eventHighlights.subtitle ? (
+              <p className="text-sm text-lekki-subtext">{eventHighlights.subtitle}</p>
+            ) : null}
+          </div>
+          <div className="hidden h-px flex-1 bg-gradient-to-r from-white/15 to-transparent sm:block" />
+        </div>
+        <GalleryWall photos={highlightPhotos} />
+      </Section>
 
-      {/* SUBSCRIBE */}
-      <Section id="subscribe" title="Get updates" subtitle="Join the list for early drops & discounts.">
+      <Section id="subscribe" title="Get updates" subtitle="Join the list for early drops and discounts.">
         <Card className="bg-lekki-panel/50 p-6 ring-1 ring-white/5">
           <form
             action="https://formspree.io/f/your-id"
@@ -107,7 +216,7 @@ return (
               Subscribe
             </button>
             <p className="text-xs text-zinc-400 sm:col-span-2">
-              We’ll only email about events. Unsubscribe anytime.
+              We will only email about events. Unsubscribe anytime.
             </p>
           </form>
         </Card>
