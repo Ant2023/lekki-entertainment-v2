@@ -72,6 +72,7 @@ export const siteSettingsType = defineType({
       name: "eventHighlights",
       title: "Event Highlights",
       type: "object",
+      hidden: true,
       fields: [
         defineField({
           name: "title",

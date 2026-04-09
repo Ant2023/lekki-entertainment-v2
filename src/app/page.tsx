@@ -13,27 +13,45 @@ export const revalidate = 30;
 
 function LekkiPromo() {
   return (
-    <div className="space-y-3">
-      <p className="text-sm uppercase tracking-widest opacity-90">LEKKI Entertainment</p>
-      <h3 className="text-2xl font-extrabold leading-tight">Afrobeats, Nightlife, Culture</h3>
-      <p className="opacity-90">
-        Curated parties and community across Denver, Aurora, and Colorado Springs.
-        Join the list to get early drops and VIP invites.
-      </p>
-      <div className="flex flex-wrap gap-3">
+    <div className="max-w-xl space-y-4 text-white">
+      <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+        {["Community", "Culture", "Late Nights"].map((item) => (
+          <span
+            key={item}
+            className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-white/80 backdrop-blur"
+          >
+            {item}
+          </span>
+        ))}
+      </div>
+
+      <div className="space-y-3">
+        <h3 className="max-w-2xl text-2xl font-semibold leading-snug text-white sm:text-4xl">
+          For the crowd, the culture, and the nights people talk about after.
+        </h3>
+        <p className="max-w-xl text-sm leading-6 text-white/72 sm:text-base">
+          Lekki brings together music, energy, and a community that shows up for the full experience.
+        </p>
+      </div>
+
+      <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
         <Link
           href="/events"
-          className="rounded-xl bg-fuchsia-600 px-4 py-2 font-semibold text-white hover:bg-fuchsia-700"
+          className="inline-flex items-center rounded-2xl bg-fuchsia-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-fuchsia-700"
         >
           See All Events
         </Link>
         <Link
           href="/subscribe"
-          className="rounded-xl bg-white/90 px-4 py-2 font-semibold text-black hover:bg-white"
+          className="inline-flex items-center rounded-2xl border border-white/15 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/15"
         >
           Join Guestlist
         </Link>
       </div>
+
+      <p className="max-w-xl text-sm leading-6 text-white/55 sm:text-base">
+        Denver, Aurora, and Colorado Springs. Early drops, curated venues, and nights worth dressing up for.
+      </p>
     </div>
   );
 }
@@ -41,7 +59,7 @@ function LekkiPromo() {
 function HeroIntro() {
   return (
     <div className="max-w-xl space-y-4 text-white">
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
         {["Afrobeats", "Nightlife", "Culture"].map((item) => (
           <span
             key={item}
@@ -61,7 +79,7 @@ function HeroIntro() {
         </p>
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
         <Link
           href="/events"
           className="inline-flex items-center rounded-2xl bg-fuchsia-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-fuchsia-700"
@@ -103,29 +121,10 @@ export default async function HomePage() {
             contentWrap: "none",
           },
           {
-            src: featuredEvent?.flyer || "/images/hero.jpg",
-            alt: featuredEvent?.title || "Lights and nightlife energy",
-            showText: !featuredEvent?.date,
-            content: featuredEvent?.date ? (
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm uppercase tracking-[0.2em] text-white/70">Featured Event</p>
-                  <h3 className="mt-2 text-2xl font-bold text-white">{featuredEvent.title}</h3>
-                  {featuredLocation ? <p className="mt-1 text-sm text-white/75">{featuredLocation}</p> : null}
-                </div>
-                <CountdownCard
-                  title={featuredEvent.title}
-                  startsAt={featuredEvent.date}
-                  href={featuredEvent.ticketUrl}
-                  buttonLabel={featuredEvent.buttonLabel}
-                />
-              </div>
-            ) : undefined,
-          },
-          {
             src: "/images/denver-10.jpg",
             alt: "DJ in the booth",
             content: <LekkiPromo />,
+            contentWrap: "glass",
           },
         ]}
         overlayOpacity={0.55}

@@ -14,7 +14,7 @@ export const deskStructure: StructureResolver = (S) =>
         ),
       S.divider(),
       S.listItem()
-        .title("Events")
+        .title("Events & Galleries")
         .schemaType("event")
-        .child(S.documentTypeList("event").title("Events")),
+        .child(S.documentTypeList("event").title("Events & Galleries")),
     ]);
