@@ -108,6 +108,7 @@ export default function Footer() {
                   href="mailto:hello@lekki.ent"
                   className="inline-block text-sm text-white/72 transition hover:text-white"
                 >
+                  Info@lekki.entertainment.com
                 </a>
                 <div className="flex flex-wrap gap-3">
                   {SOCIALS.map(({ href, label, icon: Icon }) => (
