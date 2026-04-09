@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { formatDate } from '../lib/date';
 import { Button, Card, Pill } from './UI';
 
@@ -6,7 +7,7 @@ export default function EventCard({ e }: { e: any }) {
     <Card className="overflow-hidden hover:shadow-md transition">
       <div className="grid grid-cols-1 sm:grid-cols-[240px_minmax(0,1fr)] gap-0">
         <div className="relative h-56 sm:h-56 overflow-hidden bg-zinc-950">
-          <img src={e.coverImage} alt={e.title} className="h-full w-full object-cover" />
+          <Image src={e.coverImage} alt={e.title} fill className="object-cover" sizes="(max-width: 640px) 100vw, 240px" />
         </div>
         <div className="p-5">
           <div className="flex flex-wrap items-center gap-2 mb-2">

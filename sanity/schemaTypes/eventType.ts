@@ -4,6 +4,7 @@ export const eventType = defineType({
   name: "event",
   title: "Event",
   type: "document",
+  description: "Fill out the event details, generate the slug, then publish the event to make it appear on the website.",
   groups: [
     { name: "details", title: "Details", default: true },
     { name: "media", title: "Media & Gallery" },

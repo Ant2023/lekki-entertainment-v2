@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -60,7 +61,7 @@ export default function EventDetailClient({ slug, serverEvent }: Props) {
       <Section title={event.title} subtitle="Event details & tickets">
         <div className="grid gap-6 sm:grid-cols-2">
           <div className="relative h-72 overflow-hidden rounded-2xl border border-zinc-800 shadow sm:h-96">
-            <img src={event.coverImage} alt={event.title} className="h-full w-full object-cover" />
+            <Image src={event.coverImage} alt={event.title} fill className="object-cover" sizes="(max-width: 640px) 100vw, 50vw" />
           </div>
           <div>
             <div className="mb-2 flex flex-wrap items-center gap-2">

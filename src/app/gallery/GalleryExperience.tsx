@@ -116,6 +116,7 @@ export default function GalleryExperience({ photos }: { photos: Photo[] }) {
   }
 
   const activePhoto = activeIndex !== null ? photos[activeIndex] : null;
+  const activePhotoNumber = activeIndex !== null ? activeIndex + 1 : 0;
 
   const showPrevious = () => {
     updateActiveIndex((current) => {
@@ -257,7 +258,7 @@ export default function GalleryExperience({ photos }: { photos: Photo[] }) {
             <div className="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/10 bg-black/55 px-4 py-3 text-white backdrop-blur lg:bottom-6 lg:left-6 lg:right-6">
               <p className="text-sm font-medium">{activePhoto.alt || "Nightlife event photo"}</p>
               <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/60">
-                {activeIndex + 1} / {photos.length}
+                {activePhotoNumber} / {photos.length}
               </p>
             </div>
           </div>
