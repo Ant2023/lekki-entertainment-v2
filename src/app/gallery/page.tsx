@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 
 import Section from "../../components/Section";
@@ -8,6 +9,14 @@ import { getEvents, getSiteSettings } from "../../sanity/lib/api";
 import GalleryExperience from "./GalleryExperience";
 
 export const revalidate = 30;
+
+function GalleryExperienceFallback() {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center text-sm text-white/55">
+      Loading gallery...
+    </div>
+  );
+}
 
 function dedupeEventsBySlug<T extends { slug: string }>(events: T[]) {
   const bySlug = new Map<string, T>();
@@ -77,7 +86,9 @@ export default async function GalleryPage() {
                 </div>
 
                 <div className="p-4 sm:p-5">
-                  <GalleryExperience photos={event.photos || []} />
+                  <Suspense fallback={<GalleryExperienceFallback />}>
+                    <GalleryExperience photos={event.photos || []} />
+                  </Suspense>
                 </div>
               </div>
             </section>
@@ -85,7 +96,9 @@ export default async function GalleryPage() {
         </div>
       ) : (
         <div className="space-y-8">
-          <GalleryExperience photos={fallbackPhotos} />
+          <Suspense fallback={<GalleryExperienceFallback />}>
+            <GalleryExperience photos={fallbackPhotos} />
+          </Suspense>
           <p className="text-sm text-white/55">
             Event-based galleries will appear here as photos are added to each event.
           </p>
