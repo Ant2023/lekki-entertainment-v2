@@ -54,9 +54,7 @@ export default function FeaturedEventCard({ event }: { event: AppFeaturedEvent }
               </div>
 
               {event.details ? (
-                <p className="max-w-2xl text-base leading-7 text-zinc-300 sm:text-lg">
-                  {event.details}
-                </p>
+                <p className="max-w-2xl text-base leading-7 text-zinc-300 sm:text-lg">{event.details}</p>
               ) : null}
             </div>
           </div>
@@ -67,14 +65,16 @@ export default function FeaturedEventCard({ event }: { event: AppFeaturedEvent }
                 href={event.ticketUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-2xl bg-fuchsia-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-fuchsia-700"
+                className="inline-flex items-center justify-center rounded-2xl border border-[#e2c27a]/35 bg-gradient-to-r from-[#8f6a1f] via-[#b88a2b] to-[#d1a84b] px-6 py-3 text-sm font-semibold text-[#120d05] shadow-[0_14px_34px_rgba(184,138,43,0.28)] transition hover:from-[#9b7321] hover:via-[#c79732] hover:to-[#ddb85a]"
               >
                 {event.buttonLabel}
               </Link>
             ) : null}
 
             <div className="text-sm text-white/45">
-              {event.city || event.venue ? [event.city, event.venue].filter(Boolean).join(" · ") : "Curated by Lekki Entertainment"}
+              {event.city || event.venue
+                ? [event.city, event.venue].filter(Boolean).join(" · ")
+                : "Curated by Lekki Entertainment"}
             </div>
           </div>
         </div>

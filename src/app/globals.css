@@ -14,11 +14,11 @@ body {
   /* Futuristic deep purple gradient */
   background: radial-gradient(
       1600px 800px at 20% -10%,
-      #3b1d5f 0%,     /* luminous violet center */
-      #1b0e2d 40%,    /* rich plum midtone */
-      #0d0717 100%    /* near-black fade */
+      #4a2872 0%,     /* luminous violet center */
+      #24123a 42%,    /* rich plum midtone */
+      #120a1f 100%    /* softened dark fade */
   ),
-  linear-gradient(145deg, #1c0e2d 0%, #10091a 100%);
+  linear-gradient(145deg, #24123a 0%, #140c22 100%);
   background-blend-mode: overlay;
 }
 
@@ -61,7 +61,7 @@ input, textarea {
 
 /* Subtle floating card effect for sections */
 .card-glass {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.045);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
@@ -73,9 +73,9 @@ body::before {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(800px 500px at 18% 10%, rgba(100, 56, 160, 0.18), transparent 60%),
-    radial-gradient(1200px 700px at 80% -20%, rgba(157, 78, 221, 0.12), transparent 60%),
-    radial-gradient(1000px 600px at 50% 120%, rgba(10, 6, 16, 0.6), transparent 60%);
+    radial-gradient(800px 500px at 18% 10%, rgba(100, 56, 160, 0.22), transparent 60%),
+    radial-gradient(1200px 700px at 80% -20%, rgba(157, 78, 221, 0.16), transparent 60%),
+    radial-gradient(1000px 600px at 50% 120%, rgba(10, 6, 16, 0.42), transparent 60%);
   mix-blend-mode: screen;
   z-index: 0;
 }

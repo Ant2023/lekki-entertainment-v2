@@ -1,14 +1,41 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 import Section from "../../../components/Section";
-import { getEventBySlug } from "../../../sanity/lib/api";
+import { getEventBySlug, getEvents } from "../../../sanity/lib/api";
 import { formatDate } from "../../../lib/date";
 import { Button, Pill } from "../../../components/UI";
 
-export default async function EventDetail({ params }: { params: { slug: string } }) {
-  const event = await getEventBySlug(params.slug);
+type EventDetailProps = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateStaticParams() {
+  const events = await getEvents();
+  return events.map((event) => ({ slug: event.slug }));
+}
+
+export async function generateMetadata({ params }: EventDetailProps): Promise<Metadata> {
+  const { slug } = await params;
+  const event = await getEventBySlug(slug);
+
+  if (!event) {
+    return {
+      title: "Event Not Found | LEKKI Entertainment",
+    };
+  }
+
+  return {
+    title: `${event.title} | LEKKI Entertainment`,
+    description: event.description,
+  };
+}
+
+export default async function EventDetail({ params }: EventDetailProps) {
+  const { slug } = await params;
+  const event = await getEventBySlug(slug);
   if (!event) return notFound();
 
   return (

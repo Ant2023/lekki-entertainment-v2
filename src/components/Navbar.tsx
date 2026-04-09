@@ -94,7 +94,7 @@ export default function Navbar() {
           })}
           <Link
             href="#subscribe"
-            className="u-hover-lift rounded-full bg-lekki-primary px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-lekki-accent hover:shadow-[0_0_25px_rgba(124,58,237,0.4)]"
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[#e2c27a]/35 bg-gradient-to-r from-[#8f6a1f] via-[#b88a2b] to-[#d1a84b] px-5 py-2 text-sm font-semibold text-[#120d05] shadow-[0_12px_30px_rgba(184,138,43,0.24)] transition hover:from-[#9b7321] hover:via-[#c79732] hover:to-[#ddb85a]"
           >
             Get Updates
           </Link>
@@ -188,7 +188,7 @@ export default function Navbar() {
           <Link
             href="#subscribe"
             onClick={() => setOpen(false)}
-            className="u-hover-lift rounded-md bg-lekki-primary px-3 py-2 text-center font-medium text-white transition-all duration-200 hover:bg-lekki-accent"
+            className="inline-flex min-h-[44px] items-center justify-center rounded-md border border-[#e2c27a]/35 bg-gradient-to-r from-[#8f6a1f] via-[#b88a2b] to-[#d1a84b] px-4 py-2 text-center font-medium text-[#120d05] shadow-[0_12px_30px_rgba(184,138,43,0.24)] transition hover:from-[#9b7321] hover:via-[#c79732] hover:to-[#ddb85a]"
           >
             Get Updates
           </Link>

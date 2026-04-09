@@ -6,9 +6,21 @@ import { events as localEvents } from "../../data/events";
 
 export const revalidate = 30;
 
+function dedupeEventsBySlug<T extends { slug: string }>(events: T[]) {
+  const bySlug = new Map<string, T>();
+
+  for (const event of events) {
+    if (!bySlug.has(event.slug)) {
+      bySlug.set(event.slug, event);
+    }
+  }
+
+  return Array.from(bySlug.values());
+}
+
 export default async function EventsPage() {
   const sanityEvents = await getEvents();
-  const allEvents = [...sanityEvents, ...localEvents];
+  const allEvents = dedupeEventsBySlug([...sanityEvents, ...localEvents]);
 
   const upcoming = allEvents
     .filter((event) => !isPast(event.date))

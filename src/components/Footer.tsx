@@ -1,36 +1,26 @@
 "use client";
+
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
-/* ----------------------------- CONFIG HERE ----------------------------- */
+const NAV_LINKS = [
+  { href: "/", label: "Home" },
+  { href: "/events", label: "Events" },
+  { href: "/gallery", label: "Gallery" },
+  { href: "/about", label: "About" },
+];
+
 const SOCIALS = [
   { href: "https://www.instagram.com/lekki.cos/", label: "Instagram", icon: InstagramIcon },
   { href: "https://tiktok.com/@lekkientertainment", label: "TikTok", icon: TikTokIcon },
   { href: "http://youtube.com/@LekkiRoomvybz", label: "YouTube", icon: YoutubeIcon },
-  { href: "https://x.com/lekkientertain", label: "Twitter / X", icon: XIcon },
+  { href: "https://x.com/lekkientertain", label: "X", icon: XIcon },
 ];
 
-const QUICK_LINKS = [
-  { href: "/events", label: "Events" },
-  { href: "/gallery", label: "Gallery" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-  { href: "/privacy", label: "Privacy" },
-  { href: "/terms", label: "Terms" },
-];
-
-const CONTACT = {
-  email: "hello@lekki.ent", // change to your real inbox
-  location: "Denver • Dallas • Colorado Springs",
-};
-/* ---------------------------------------------------------------------- */
-
-/** tiny class joiner (no dependency) */
-function cx(...a: (string | false | null | undefined)[]) {
-  return a.filter(Boolean).join(" ");
+function cx(...values: Array<string | false | null | undefined>) {
+  return values.filter(Boolean).join(" ");
 }
 
-/** reveal when in view (respects reduced motion) */
 function useReveal<T extends HTMLElement>(once = true) {
   const ref = useRef<T | null>(null);
   const [visible, setVisible] = useState(false);
@@ -39,29 +29,29 @@ function useReveal<T extends HTMLElement>(once = true) {
     const el = ref.current;
     if (!el) return;
 
-    const prefersReduced =
+    const prefersReducedMotion =
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (prefersReduced) {
+    if (prefersReducedMotion) {
       setVisible(true);
       return;
     }
 
-    const io = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
             setVisible(true);
-            if (once) io.disconnect();
+            if (once) observer.disconnect();
           }
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.12 }
     );
 
-    io.observe(el);
-    return () => io.disconnect();
+    observer.observe(el);
+    return () => observer.disconnect();
   }, [once]);
 
   return { ref, visible };
@@ -71,81 +61,82 @@ export default function Footer() {
   const wrap = useReveal<HTMLDivElement>(true);
 
   return (
-    <footer className="border-t border-white/10 bg-black/40 pt-10">
-      {/* content */}
+    <footer className="relative mt-20 border-t border-white/10 bg-black/30">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_38%)] opacity-60" />
+
       <div
         ref={wrap.ref}
         className={cx(
-          "mx-auto flex max-w-6xl flex-col gap-8 px-4 pb-8 sm:flex-row sm:items-start sm:justify-between",
-          "transition-all duration-500",
-          wrap.visible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
+          "relative mx-auto max-w-6xl px-4 py-12 transition-all duration-700 sm:py-16",
+          wrap.visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
         )}
       >
-        {/* Brand blurb */}
-        <div className="max-w-sm">
-          <div className="text-lg font-extrabold tracking-tight text-white">
-            LEKKI <span className="text-lekki-primary">Entertainment</span>
-          </div>
-          <p className="mt-2 text-sm text-white/70">
-            Afrobeats • Amapiano • Lounge vibes — {CONTACT.location}
-          </p>
+        <div className="rounded-[2rem] border border-white/10 bg-white/[0.035] px-6 py-10 shadow-[0_18px_60px_rgba(0,0,0,0.32)] backdrop-blur-xl sm:px-8">
+          <div className="grid gap-10 lg:grid-cols-[1.4fr_0.9fr] lg:gap-16">
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <p className="text-[11px] uppercase tracking-[0.32em] text-white/45">Lekki Entertainment</p>
+                <h2 className="max-w-xl text-2xl font-semibold tracking-[-0.03em] text-white sm:text-[2rem]">
+                  Refined nights, curated with intention.
+                </h2>
+                <p className="max-w-lg text-sm leading-7 text-white/58 sm:text-[15px]">
+                  Event culture shaped with a cleaner standard for atmosphere, community, and presentation.
+                </p>
+              </div>
+            </div>
 
-          {/* Socials */}
-          <div className="mt-4 flex items-center gap-4">
-            {SOCIALS.map(({ href, label, icon: Icon }, i) => (
-              <a
-                key={i}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                className={cx(
-                  "group inline-flex h-10 w-10 items-center justify-center rounded-full",
-                  "bg-white/5 ring-1 ring-white/10 text-white/80",
-                  "transition-all duration-200 hover:bg-white/10 hover:text-fuchsia-400 hover:shadow-[0_0_25px_rgba(217,70,239,0.25)]"
-                )}
-              >
-                <Icon className="h-5 w-5 transition-transform duration-200 group-hover:scale-110 group-hover:animate-pulse" />
-              </a>
-            ))}
-          </div>
-        </div>
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-1">
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.28em] text-white/40">Navigation</p>
+                <div className="mt-4 flex flex-wrap gap-x-6 gap-y-3">
+                  {NAV_LINKS.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="u-underline-slide text-sm text-white/65 transition hover:text-white"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
 
-        {/* Quick links */}
-        <nav className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm sm:grid-cols-3">
-          {QUICK_LINKS.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className="u-underline-slide text-white/70 transition hover:text-white"
-            >
-              {l.label}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Contact */}
-        <div className="text-sm text-white/70">
-          <div>
-            Email:{" "}
-            <a
-              href={`mailto:${CONTACT.email}`}
-              className="u-underline-slide text-fuchsia-300 hover:text-fuchsia-200"
-            >
-              {CONTACT.email}
-            </a>
+              <div className="space-y-4">
+                <p className="text-[11px] uppercase tracking-[0.28em] text-white/40">Connect</p>
+                <a
+                  href="mailto:hello@lekki.ent"
+                  className="inline-block text-sm text-white/72 transition hover:text-white"
+                >
+                </a>
+                <div className="flex flex-wrap gap-3">
+                  {SOCIALS.map(({ href, label, icon: Icon }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={label}
+                      className="group inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white/65 transition hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
+                    >
+                      <Icon className="h-4.5 w-4.5 transition-transform duration-200 group-hover:scale-105" />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="mt-1">© {new Date().getFullYear()} Lekki Entertainment. All rights reserved.</div>
+
+          <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-5 text-xs uppercase tracking-[0.2em] text-white/34 sm:flex-row sm:items-center sm:justify-between">
+            <p>Colorado Springs, Denver, Boulder</p>
+            <p>Copyright {new Date().getFullYear()} Lekki Entertainment</p>
+          </div>
         </div>
       </div>
-
-      {/* slim bottom bar */}
-      <div className="h-px w-full bg-gradient-to-r from-lekki-primary via-fuchsia-500/50 to-lekki-accent/70" />
     </footer>
   );
 }
 
-/* ------------------------- Inline SVG icon components ------------------------- */
 function InstagramIcon({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
@@ -153,6 +144,7 @@ function InstagramIcon({ className = "" }: { className?: string }) {
     </svg>
   );
 }
+
 function TikTokIcon({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
@@ -160,6 +152,7 @@ function TikTokIcon({ className = "" }: { className?: string }) {
     </svg>
   );
 }
+
 function YoutubeIcon({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
@@ -167,6 +160,7 @@ function YoutubeIcon({ className = "" }: { className?: string }) {
     </svg>
   );
 }
+
 function XIcon({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>

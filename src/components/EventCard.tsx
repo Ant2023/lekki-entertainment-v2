@@ -1,6 +1,8 @@
 import Image from "next/image";
-import { formatDate } from '../lib/date';
-import { Button, Card, Pill } from './UI';
+import Link from "next/link";
+
+import { formatDate } from "../lib/date";
+import { Button, Card, Pill } from "./UI";
 
 export default function EventCard({ e }: { e: any }) {
   return (
@@ -23,6 +25,9 @@ export default function EventCard({ e }: { e: any }) {
                 Get Tickets
               </Button>
             ) : null}
+            <Button as={Link} href={`/events/${e.slug}`}>
+              View Event
+            </Button>
           </div>
         </div>
       </div>

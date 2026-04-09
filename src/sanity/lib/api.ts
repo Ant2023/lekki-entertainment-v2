@@ -52,6 +52,8 @@ export type AppSiteSettings = {
   };
 };
 
+const FALLBACK_EVENT_IMAGE = "/images/hero-dj.jpg";
+
 function mapGalleryImage(image: SanityImageLike, fallbackAlt: string): AppGalleryImage | null {
   const src = urlForImage(image)?.width(1600).height(1200).fit("crop").url();
   if (!src) return null;
@@ -121,10 +123,7 @@ export function mapSiteSettings(siteSettings: SanitySiteSettings | null | undefi
 
 function mapEvent(event: SanityEvent): AppEvent | null {
   const slug = event.slug?.current;
-  if (!slug) return null;
-
-  const coverImage = urlForImage(event.coverImage)?.width(800).height(600).fit("crop").url();
-  if (!coverImage) return null;
+  if (!slug || !event.title || !event.date) return null;
 
   const photos = event.photos
     ?.map((photo, index) => {
@@ -137,13 +136,18 @@ function mapEvent(event: SanityEvent): AppEvent | null {
     })
     .filter((photo): photo is AppEventPhoto => Boolean(photo));
 
+  const coverImage =
+    urlForImage(event.coverImage)?.width(800).height(600).fit("crop").url() ||
+    photos?.[0]?.src ||
+    FALLBACK_EVENT_IMAGE;
+
   return {
     slug,
     title: event.title,
     date: event.date,
-    venue: event.venue,
-    city: event.city,
-    description: event.description,
+    venue: event.venue || "Venue to be announced",
+    city: event.city || "City to be announced",
+    description: event.description || "More details coming soon.",
     coverImage,
     ticketUrl: event.ticketUrl,
     photos,

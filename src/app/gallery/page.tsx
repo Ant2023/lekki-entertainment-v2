@@ -54,7 +54,11 @@ export default async function GalleryPage() {
       {galleryEvents.length ? (
         <div className="space-y-10">
           {galleryEvents.map((event) => (
-            <section key={event.slug} className="space-y-5 border-t border-white/10 pt-6 first:border-t-0 first:pt-0">
+            <section
+              key={event.slug}
+              id={event.slug}
+              className="scroll-mt-28 space-y-5 border-t border-white/10 pt-6 first:border-t-0 first:pt-0"
+            >
               <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03]">
                 <div className="relative overflow-hidden border-b border-white/10">
                   <div
