@@ -118,9 +118,9 @@ export default function Footer() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={label}
-                      className="group inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white/65 transition hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
+                      className="group inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.07] text-white/85 transition hover:border-white/20 hover:bg-white/[0.1] hover:text-white"
                     >
-                      <Icon className="h-4.5 w-4.5 transition-transform duration-200 group-hover:scale-105" />
+                      <Icon className="h-[18px] w-[18px] flex-none transition-transform duration-200 group-hover:scale-105" />
                     </a>
                   ))}
                 </div>
