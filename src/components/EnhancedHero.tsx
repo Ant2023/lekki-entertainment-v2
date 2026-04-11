@@ -18,6 +18,7 @@ export type HeroProProps = {
     eyebrow?: string;
     content?: ReactNode;
     contentWrap?: "glass" | "light" | "none";
+    objectPosition?: string;
   }>;
   overlayOpacity?: number;
   ctas?: Array<{ label: string; href: string }>;
@@ -120,6 +121,7 @@ export default function HeroPro({
                 priority={i === 0}
                 sizes="100vw"
                 className="object-cover object-center"
+                style={img.objectPosition ? { objectPosition: img.objectPosition } : undefined}
               />
               <div
                 className="absolute inset-0"

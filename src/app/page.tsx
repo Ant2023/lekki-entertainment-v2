@@ -119,6 +119,20 @@ function LekkiPromo() {
   );
 }
 
+function NightOutEnergy() {
+  return (
+    <HeroSlideContent
+      badges={["Afrobeats", "DJ Sets", "Nightlife"]}
+      title="More than a night out."
+      body="A room built for the sound, the style, and the people who make every moment feel alive."
+      actions={[
+        { label: "View Highlights", href: "/gallery", variant: "primary" },
+        { label: "See Events", href: "/events", variant: "secondary" },
+      ]}
+    />
+  );
+}
+
 function HeroIntro() {
   return (
     <HeroSlideContent
@@ -128,20 +142,6 @@ function HeroIntro() {
       actions={[
         { label: "Explore Events", href: "/events", variant: "primary" },
         { label: "View Highlights", href: "/gallery", variant: "secondary" },
-      ]}
-    />
-  );
-}
-
-function CommunityEnergy() {
-  return (
-    <HeroSlideContent
-      badges={["Denver", "Dance Floor", "Diaspora"]}
-      title="Good people, full energy."
-      body="Real moments from nights where the room moves together and the culture feels close."
-      actions={[
-        { label: "View Highlights", href: "/gallery", variant: "primary" },
-        { label: "See Events", href: "/events", variant: "secondary" },
       ]}
     />
   );
@@ -170,22 +170,24 @@ export default async function HomePage() {
         subtitle="Premium Afrobeats, culture, and nightlife in Denver, Aurora, and Colorado Springs"
         images={[
           {
-            src: "/images/hero-image2.jpg",
-            alt: "Packed Afrobeats crowd",
+            src: "/images/hero-image3.jpg",
+            alt: "Guest enjoying a Lekki nightlife moment",
             content: <HeroIntro />,
             contentWrap: "none",
+            objectPosition: "62% center",
           },
           {
             src: "/images/djames-denver/denver-13.jpg",
             alt: "Lekki crowd celebrating on the dance floor",
-            content: <CommunityEnergy />,
+            content: <NightOutEnergy />,
             contentWrap: "none",
           },
           {
-            src: "/images/lekki-hero.jpg",
-            alt: "Lekki hero atmosphere",
+            src: "/images/wande-coal-denver/IMG_0536.jpg",
+            alt: "Guest dancing at a Lekki nightlife event",
             content: <LekkiPromo />,
             contentWrap: "none",
+            objectPosition: "42% center",
           },
         ]}
         overlayOpacity={0.58}
