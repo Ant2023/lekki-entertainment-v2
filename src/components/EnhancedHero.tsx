@@ -124,7 +124,7 @@ export default function HeroPro({
               <div
                 className="absolute inset-0"
                 style={{
-                  background: `linear-gradient(180deg, ${overlayBg} 0%, rgba(0,0,0,0.15) 30%, rgba(0,0,0,0.25) 60%, ${overlayBg} 100%)`,
+                  background: `linear-gradient(180deg, ${overlayBg} 0%, rgba(0,0,0,0.3) 34%, rgba(0,0,0,0.36) 64%, ${overlayBg} 100%)`,
                 }}
                 aria-hidden
               />

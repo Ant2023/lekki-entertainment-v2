@@ -17,7 +17,7 @@ type Props = {
 /** Small, dependency-free reveal on scroll (respects reduced motion) */
 function useReveal<T extends HTMLElement>(once = true) {
   const ref = useRef<T | null>(null);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
     const el = ref.current;
@@ -64,12 +64,12 @@ export default function Section({ id, title, subtitle, className, children }: Pr
         <div
           ref={head.ref}
           className={cx(
-            "mb-6 transition-all duration-500",
+            "mb-6 text-center transition-all duration-500 sm:text-left",
             head.visible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
           )}
         >
           {title && <h2 className="text-xl font-semibold text-white/90 sm:text-2xl">{title}</h2>}
-          {subtitle && <p className="mt-1 text-sm text-lekki-subtext">{subtitle}</p>}
+          {subtitle && <p className="mt-1 text-base leading-7 text-white/78 sm:text-lg">{subtitle}</p>}
         </div>
       )}
 

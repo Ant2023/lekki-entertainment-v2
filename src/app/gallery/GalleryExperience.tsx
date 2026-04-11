@@ -3,7 +3,6 @@
 import { createPortal } from "react-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type Photo = {
   src: string;
@@ -36,31 +35,13 @@ function CloseIcon() {
 }
 
 export default function GalleryExperience({ photos }: { photos: Photo[] }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
   const touchStartX = useRef<number | null>(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const imageParam = searchParams.get("image");
-  const parsedIndex = imageParam ? Number.parseInt(imageParam, 10) : NaN;
-  const activeIndex = Number.isInteger(parsedIndex) && parsedIndex >= 0 && parsedIndex < photos.length ? parsedIndex : null;
-  const updateActiveIndex = useCallback(
-    (nextIndex: number | null | ((current: number | null) => number | null)) => {
-      const resolvedIndex = typeof nextIndex === "function" ? nextIndex(activeIndex) : nextIndex;
-      const params = new URLSearchParams(searchParams.toString());
-
-      if (resolvedIndex === null) {
-        params.delete("image");
-      } else {
-        params.set("image", String(resolvedIndex));
-      }
-
-      const nextQuery = params.toString();
-      router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
-    },
-    [activeIndex, pathname, router, searchParams]
-  );
+  const updateActiveIndex = useCallback((nextIndex: number | null | ((current: number | null) => number | null)) => {
+    setActiveIndex((current) => (typeof nextIndex === "function" ? nextIndex(current) : nextIndex));
+  }, []);
 
   useEffect(() => {
     setIsMounted(true);
@@ -172,28 +153,21 @@ export default function GalleryExperience({ photos }: { photos: Photo[] }) {
   return (
     <>
       <div className="space-y-5 sm:space-y-6">
-        <div className="grid auto-rows-[190px] grid-cols-2 gap-4 sm:auto-rows-[240px] sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
           {photos.map((photo, index) => {
-              const cardVariant = index % 5;
-              const isTall = cardVariant === 0 || cardVariant === 3;
-              const isWide = cardVariant === 2;
-
               return (
                 <button
                   type="button"
                   key={`${photo.src}-${index}`}
                   onClick={() => updateActiveIndex(index)}
                   aria-label={`Open image: ${photo.alt || "Nightlife event photo"}`}
-                  className={`group relative overflow-hidden rounded-[1.5rem] bg-black/10 text-left ${
-                    isTall ? "row-span-2" : ""
-                  } ${isWide ? "col-span-2 sm:col-span-1" : ""}`}
+                  className="group relative aspect-[4/5] overflow-hidden rounded-xl border border-white/10 bg-black/20 text-left transition duration-300 hover:-translate-y-1 hover:border-white/20 sm:rounded-2xl"
                 >
                   <Image
                     src={photo.src}
                     alt={photo.alt || "Nightlife event photo"}
                     fill
-                    sizes="(max-width: 640px) 50vw, 33vw"
-                    priority={index < 3}
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 360px"
                     className="object-cover transition duration-700 group-hover:scale-[1.04]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
@@ -274,7 +248,7 @@ export default function GalleryExperience({ photos }: { photos: Photo[] }) {
                 onClick={() => updateActiveIndex(index)}
                 aria-label={`View image ${index + 1}`}
                 className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border transition ${
-                  index === activeIndex ? "border-fuchsia-300 ring-2 ring-fuchsia-400/50" : "border-white/10"
+                  index === activeIndex ? "border-[#f2d17a] ring-2 ring-[#d4af37]/45" : "border-white/10"
                 }`}
               >
                 <Image

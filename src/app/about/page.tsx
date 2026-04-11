@@ -26,12 +26,6 @@ export default function AboutPage() {
     { label: "Guests Hosted", value: "10K+" },
   ];
 
-  const socials = [
-    { label: "Instagram", href: "https://instagram.com/lekkientertainment" },
-    { label: "TikTok", href: "https://tiktok.com/@lekkientertainment" },
-    { label: "Email", href: "mailto:info@lekkientertainment.com" },
-  ];
-
   return (
     <main className="bg-black text-white">
       {/* ===== HERO ===== */}
@@ -72,13 +66,13 @@ export default function AboutPage() {
             <div className="mt-8 flex items-center justify-center gap-3">
               <Link
                 href="/events"
-                className="rounded-2xl bg-white text-black px-5 py-3 text-sm font-semibold hover:bg-white/90 transition"
+                className="rounded-md border border-[#d4af37]/45 bg-black/75 px-5 py-3 text-sm font-semibold text-[#f2d17a] transition hover:border-[#e6c76a]/60 hover:bg-black/85 hover:text-[#f7df98]"
               >
                 See Events
               </Link>
               <Link
                 href="/gallery"
-                className="rounded-2xl border border-white/20 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"
+                className="rounded-md border border-white/18 bg-white/6 px-5 py-3 text-sm font-semibold text-white transition hover:border-[#d4af37]/35 hover:bg-white/10 hover:text-[#f2d17a]"
               >
                 View Gallery
               </Link>
@@ -97,7 +91,7 @@ export default function AboutPage() {
       {/* ===== STORY ===== */}
       <section className="mx-auto max-w-6xl px-6 py-16">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl sm:text-4xl font-semibold tracking-wide text-cyan-300 uppercase">
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-wide text-[#f2d17a] uppercase">
             Our Story
           </h2>
           <p className="mt-6 text-gray-300 leading-relaxed text-lg">
@@ -116,9 +110,9 @@ export default function AboutPage() {
           {highlights.map((h) => (
             <div
               key={h.title}
-              className="group rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.03] to-transparent p-6 transition hover:border-white/20 hover:from-white/[0.06]"
+              className="group rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.03] to-transparent p-6 text-center transition hover:border-white/20 hover:from-white/[0.06] sm:text-left"
             >
-              <h3 className="text-xl font-semibold text-cyan-300 mb-2">
+              <h3 className="text-xl font-semibold text-[#f2d17a] mb-2">
                 {h.title}
               </h3>
               <p className="text-gray-300">{h.desc}</p>
@@ -173,23 +167,23 @@ export default function AboutPage() {
       {/* ===== TEAM (optional short blurb) ===== */}
       <section className="mx-auto max-w-6xl px-6 py-16">
         <div className="grid grid-cols-1 items-center gap-10 sm:grid-cols-2">
-          <div>
+          <div className="text-center sm:text-left">
             <h3 className="text-2xl font-semibold">Who We Are</h3>
             <p className="mt-4 text-gray-300">
 Lekki Entertainment is a collective of curators, DJs, hosts, and designers bringing a modern African lens to nightlife. We obsess over the details like sound, lighting, and flow so the only thing you need to do is show up and enjoy.            </p>
             <p className="mt-4 text-gray-400">
               Want to collaborate or book us for your city? Let’s talk.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap justify-center gap-3 sm:justify-start">
               <Link
                 href="/contact"
-                className="rounded-xl bg-white text-black px-4 py-2 text-sm font-semibold hover:bg-white/90 transition"
+                className="rounded-md border border-[#d4af37]/45 bg-black/75 px-4 py-2 text-sm font-semibold text-[#f2d17a] transition hover:border-[#e6c76a]/60 hover:bg-black/85 hover:text-[#f7df98]"
               >
                 Contact Us
               </Link>
               <Link
                 href="/bookings"
-                className="rounded-xl border border-white/20 px-4 py-2 text-sm font-semibold hover:bg-white/10 transition"
+                className="rounded-md border border-white/18 bg-white/6 px-4 py-2 text-sm font-semibold text-white transition hover:border-[#d4af37]/35 hover:bg-white/10 hover:text-[#f2d17a]"
               >
                 Booking & Collabs
               </Link>
@@ -218,14 +212,14 @@ Lekki Entertainment is a collective of curators, DJs, hosts, and designers bring
           <div className="mt-6 flex items-center justify-center gap-3">
             <Link
               href="/events"
-              className="rounded-2xl bg-white text-black px-5 py-3 text-sm font-semibold hover:bg-white/90 transition"
+              className="rounded-md border border-[#d4af37]/45 bg-black/75 px-5 py-3 text-sm font-semibold text-[#f2d17a] transition hover:border-[#e6c76a]/60 hover:bg-black/85 hover:text-[#f7df98]"
             >
               Upcoming Events
             </Link>
             <a
               href="https://www.instagram.com/lekki.cos/"
               target="_blank"
-              className="rounded-2xl border border-white/20 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"
+              className="rounded-md border border-white/18 bg-white/6 px-5 py-3 text-sm font-semibold text-white transition hover:border-[#d4af37]/35 hover:bg-white/10 hover:text-[#f2d17a]"
             >
               Follow on Instagram
             </a>
@@ -234,24 +228,6 @@ Lekki Entertainment is a collective of curators, DJs, hosts, and designers bring
       </section>
 
       {/* ===== FOOTER SOCIALS ===== */}
-      <footer className="border-t border-white/10 py-10">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-6 sm:flex-row">
-          <p className="text-white/60">© {new Date().getFullYear()} Lekki Entertainment</p>
-          <nav className="flex flex-wrap items-center gap-4 text-sm">
-            {socials.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target={s.href.startsWith("http") ? "_blank" : undefined}
-                className="hover:text-cyan-300 transition"
-              >
-                {s.label}
-              </a>
-            ))}
-          </nav>
-        </div>
-      </footer>
-
       {/* Local styles for the marquee animation */}
       <style jsx>{`
         .animate-marquee {

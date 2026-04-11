@@ -72,15 +72,15 @@ export default function Footer() {
           wrap.visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
         )}
       >
-        <div className="rounded-[2rem] border border-white/10 bg-white/[0.035] px-6 py-10 shadow-[0_18px_60px_rgba(0,0,0,0.32)] backdrop-blur-xl sm:px-8">
+        <div className="rounded-[2rem] border border-white/10 bg-white/[0.035] px-6 py-10 text-center shadow-[0_18px_60px_rgba(0,0,0,0.32)] backdrop-blur-xl sm:px-8 lg:text-left">
           <div className="grid gap-10 lg:grid-cols-[1.4fr_0.9fr] lg:gap-16">
             <div className="space-y-6">
               <div className="space-y-3">
                 <p className="text-[11px] uppercase tracking-[0.32em] text-white/45">Lekki Entertainment</p>
-                <h2 className="max-w-xl text-2xl font-semibold tracking-[-0.03em] text-white sm:text-[2rem]">
+                <h2 className="mx-auto max-w-xl text-2xl font-semibold tracking-[-0.03em] text-white sm:text-[2rem] lg:mx-0">
                   Refined nights, curated with intention.
                 </h2>
-                <p className="max-w-lg text-sm leading-7 text-white/58 sm:text-[15px]">
+                <p className="mx-auto max-w-lg text-sm leading-7 text-white/58 sm:text-[15px] lg:mx-0">
                   Event culture shaped with a cleaner standard for atmosphere, community, and presentation.
                 </p>
               </div>
@@ -89,7 +89,7 @@ export default function Footer() {
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-1">
               <div>
                 <p className="text-[11px] uppercase tracking-[0.28em] text-white/40">Navigation</p>
-                <div className="mt-4 flex flex-wrap gap-x-6 gap-y-3">
+                <div className="mt-4 flex flex-wrap justify-center gap-x-6 gap-y-3 lg:justify-start">
                   {NAV_LINKS.map((link) => (
                     <Link
                       key={link.href}
@@ -110,7 +110,7 @@ export default function Footer() {
                 >
                   Info@lekki.entertainment.com
                 </a>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap justify-center gap-3 lg:justify-start">
                   {SOCIALS.map(({ href, label, icon: Icon }) => (
                     <a
                       key={label}
@@ -128,7 +128,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-5 text-xs uppercase tracking-[0.2em] text-white/34 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-10 flex flex-col items-center gap-3 border-t border-white/10 pt-5 text-xs uppercase tracking-[0.2em] text-white/34 sm:flex-row sm:justify-between sm:text-left">
             <p>Colorado Springs, Denver, Boulder</p>
             <p>Copyright {new Date().getFullYear()} Lekki Entertainment</p>
           </div>

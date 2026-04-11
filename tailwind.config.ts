@@ -6,8 +6,8 @@ const config: Config = {
     extend: {
       colors: {
         lekki: {
-          bg: "#0B0B10",       // dark background
-          panel: "#11121A",    // nav & card background
+          bg: "#211731",       // dark background
+          panel: "#29213A",    // nav & card background
           primary: "#7C3AED",  // royal purple
           accent: "#9D4EDD",   // lighter purple
           text: "#EDEDF1",     // main text

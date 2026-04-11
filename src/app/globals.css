@@ -14,11 +14,11 @@ body {
   /* Futuristic deep purple gradient */
   background: radial-gradient(
       1600px 800px at 20% -10%,
-      #4a2872 0%,     /* luminous violet center */
-      #24123a 42%,    /* rich plum midtone */
-      #120a1f 100%    /* softened dark fade */
+      #7040a0 0%,     /* luminous violet center */
+      #3a205c 40%,    /* rich plum midtone */
+      #211735 100%    /* near-black fade */
   ),
-  linear-gradient(145deg, #24123a 0%, #140c22 100%);
+  linear-gradient(145deg, #3a2158 0%, #251738 100%);
   background-blend-mode: overlay;
 }
 
@@ -54,17 +54,17 @@ a:hover {
 /* ---------- Form Elements ---------- */
 input, textarea {
   @apply text-white placeholder:text-zinc-500;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.095);
+  border: 1px solid rgba(255, 255, 255, 0.17);
   backdrop-filter: blur(6px);
 }
 
 /* Subtle floating card effect for sections */
 .card-glass {
-  background: rgba(255, 255, 255, 0.045);
+  background: rgba(255, 255, 255, 0.075);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.16);
 }
 /* Subtle vignette to add depth and hide any gradient banding */
 body::before {
@@ -73,9 +73,9 @@ body::before {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(800px 500px at 18% 10%, rgba(100, 56, 160, 0.22), transparent 60%),
-    radial-gradient(1200px 700px at 80% -20%, rgba(157, 78, 221, 0.16), transparent 60%),
-    radial-gradient(1000px 600px at 50% 120%, rgba(10, 6, 16, 0.42), transparent 60%);
+    radial-gradient(800px 500px at 18% 10%, rgba(158, 105, 220, 0.28), transparent 60%),
+    radial-gradient(1200px 700px at 80% -20%, rgba(206, 139, 252, 0.2), transparent 60%),
+    radial-gradient(1000px 600px at 50% 120%, rgba(38, 25, 56, 0.24), transparent 60%);
   mix-blend-mode: screen;
   z-index: 0;
 }

@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Image from "next/image";
 import Link from "next/link";
 
 import Section from "../../components/Section";
@@ -53,7 +54,7 @@ export default async function GalleryPage() {
     >
       {galleryEvents.length ? (
         <div className="space-y-10">
-          {galleryEvents.map((event) => (
+          {galleryEvents.map((event, eventIndex) => (
             <section
               key={event.slug}
               id={event.slug}
@@ -61,14 +62,21 @@ export default async function GalleryPage() {
             >
               <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03]">
                 <div className="relative overflow-hidden border-b border-white/10">
-                  <div
-                    className="h-56 w-full bg-cover bg-center sm:h-72 lg:h-80"
-                    style={{ backgroundImage: `linear-gradient(180deg, rgba(5,5,8,0.1) 0%, rgba(5,5,8,0.72) 100%), url("${event.coverImage}")` }}
-                  />
+                  <div className="relative h-56 w-full sm:h-72 lg:h-80">
+                    <Image
+                      src={event.coverImage}
+                      alt={`${event.title} gallery cover`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 1152px"
+                      priority={eventIndex === 0}
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/30 to-black/78" />
+                  </div>
 
                   <div className="absolute inset-x-0 bottom-0 flex flex-col gap-4 p-5 sm:p-6 lg:flex-row lg:items-end lg:justify-between">
                     <div className="space-y-2">
-                      <p className="text-[11px] uppercase tracking-[0.24em] text-fuchsia-200/75">{event.city}</p>
+                      <p className="text-[11px] uppercase tracking-[0.24em] text-[#f2d17a]/75">{event.city}</p>
                       <h2 className="max-w-3xl text-2xl font-semibold tracking-tight text-white sm:text-3xl">
                         {event.title}
                       </h2>
@@ -81,7 +89,7 @@ export default async function GalleryPage() {
                       <span>{event.photos?.length || 0} photos</span>
                       <Link
                         href={`/events/${event.slug}`}
-                        className="font-medium text-white transition hover:text-fuchsia-300"
+                        className="font-medium text-white transition hover:text-[#f2d17a]"
                       >
                         View Event
                       </Link>
@@ -112,10 +120,10 @@ export default async function GalleryPage() {
       <div className="flex flex-wrap items-center gap-6 border-t border-white/10 pt-6 text-sm text-white/55">
         <p>Catch the next night live.</p>
         <div className="flex flex-wrap gap-5">
-          <Link href="/events" className="font-medium text-white transition hover:text-fuchsia-300">
+          <Link href="/events" className="font-medium text-white transition hover:text-[#f2d17a]">
             Explore Events
           </Link>
-          <Link href="/subscribe" className="font-medium text-white transition hover:text-fuchsia-300">
+          <Link href="/subscribe" className="font-medium text-white transition hover:text-[#f2d17a]">
             Join Guestlist
           </Link>
         </div>
